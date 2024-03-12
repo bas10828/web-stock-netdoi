@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import mysql.connector
 
 app = Flask(__name__)
+CORS(app)  # เพิ่มบรรทัดนี้เพื่อกำหนดค่า CORS ให้กับ Flask ของคุณ
 
 # เชื่อมต่อกับ MySQL Server
 connection = mysql.connector.connect(
