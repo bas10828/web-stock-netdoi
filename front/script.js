@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.getElementById('tableBody');
 
-    fetch('http://127.0.0.1:5000/data')
+    fetch('http://192.168.114.134:5000/data')
         .then(response => response.json())
         .then(data => {
             // Loop through each item in the data array and create a table row for it
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to delete data
     function deleteData(id) {
         if (confirm('Are you sure you want to delete this data?')) {
-            fetch(`http://127.0.0.1:5000/data/${id}`, {
+            fetch(`http://192.168.114.134:5000/data/${id}`, {
                 method: 'DELETE'
             })
                 .then(response => {

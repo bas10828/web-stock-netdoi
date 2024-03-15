@@ -3,7 +3,8 @@ from flask_cors import CORS
 import mysql.connector
 
 app = Flask(__name__)
-CORS(app)  # เพิ่มบรรทัดนี้เพื่อกำหนดค่า CORS ให้กับ Flask ของคุณ
+CORS(app, resources={r"/data/*": {"origins": "http://192.168.114.134:3000"}})
+
 
 # เชื่อมต่อกับ MySQL Server
 connection = mysql.connector.connect(
@@ -55,7 +56,8 @@ def delete_data(id):
     return 'Data deleted successfully', 200, {'Access-Control-Allow-Origin': 'http://192.168.114.134:3000'}
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=5000)
+
 
 # ปิดการเชื่อมต่อ
 connection.close()
