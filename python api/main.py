@@ -22,7 +22,7 @@ def create_data():
     cursor.execute(query, (data['proid'], data['serial'], data['mac'], data['status_stock'], data['lot_stock'], data['price'], data['brand'], data['model'], data['project']))
     connection.commit()
     cursor.close()
-    return 'Data created successfully', 201
+    return 'Data created successfully', 201, {'Access-Control-Allow-Origin': 'http://192.168.114.134:3000'}
 
 # Read (อ่านข้อมูล)
 @app.route('/data', methods=['GET'])
@@ -42,7 +42,7 @@ def update_data(id):
     cursor.execute(query, (data['proid'], data['serial'], data['mac'], data['status_stock'], data['lot_stock'], data['price'], data['brand'], data['model'], data['project'], id))
     connection.commit()
     cursor.close()
-    return 'Data updated successfully', 200
+    return 'Data updated successfully', 200, {'Access-Control-Allow-Origin': 'http://192.168.114.134:3000'}
 
 # Delete (ลบข้อมูล)
 @app.route('/data/<int:id>', methods=['DELETE'])
@@ -52,7 +52,7 @@ def delete_data(id):
     cursor.execute(query, (id,))
     connection.commit()
     cursor.close()
-    return 'Data deleted successfully', 200
+    return 'Data deleted successfully', 200, {'Access-Control-Allow-Origin': 'http://192.168.114.134:3000'}
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

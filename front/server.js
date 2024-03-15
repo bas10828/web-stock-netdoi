@@ -4,22 +4,24 @@ const app = express();
 const path = require('path');
 
 // ใช้ cors middleware เพื่ออนุญาตการเข้าถึงจากโดเมนอื่น
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
-}));
+app.use(cors());
 
 // Serve static files from the 'front' directory
 app.use(express.static(path.join(__dirname, 'front')));
 
 // Serve index.html as the main page
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname,  'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Serve script.js
 app.get('/script.js', (req, res) => {
-    res.sendFile(path.join(__dirname,  'script.js'), { 'Content-Type': 'application/javascript' });
+    res.sendFile(path.join(__dirname, 'script.js'), { 'Content-Type': 'application/javascript' });
+});
+
+// Serve create.html
+app.get('/create/create.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'create', 'create.html'));
 });
 
 // Start the server
