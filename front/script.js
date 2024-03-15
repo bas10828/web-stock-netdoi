@@ -4,8 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch('http://127.0.0.1:5000/data')
         .then(response => response.json())
         .then(data => {
-            console.log(data); // Log data to console for debugging
-
             // Loop through each item in the data array and create a table row for it
             data.forEach(item => {
                 appendTableRow(item);
@@ -18,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to append a new row to the table
     function appendTableRow(item) {
         const row = document.createElement('tr');
+        row.id = `row-${item.id}`; // Add id to the row
         row.innerHTML = `
             <td>${item.id}</td>
             <td>${item.proid}</td>
@@ -29,8 +28,39 @@ document.addEventListener("DOMContentLoaded", function () {
             <td>${item.project ? item.project : ''}</td>
             <td>${item.lot_stock}</td>
             <td>${item.status_stock}</td>
+            <td><button class="deleteBtn">Delete</button></td>
         `;
         tableBody.appendChild(row);
+    }
+
+    // Add event listener for the "Delete" buttons
+    tableBody.addEventListener('click', function (event) {
+        if (event.target.classList.contains('deleteBtn')) {
+            const id = event.target.closest('tr').id.split('-')[1];
+            deleteData(id);
+        }
+    });
+
+    // Function to delete data
+    function deleteData(id) {
+        if (confirm('Are you sure you want to delete this data?')) {
+            fetch(`http://127.0.0.1:5000/data/${id}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Remove the row from the table if deletion is successful
+                        const row = document.getElementById(`row-${id}`);
+                        row.parentNode.removeChild(row);
+                    } else {
+                        throw new Error('Failed to delete data');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting data:', error);
+                    alert('Failed to delete data. Please try again.');
+                });
+        }
     }
 
     // Add event listener for the "Add Data" button
@@ -39,6 +69,5 @@ document.addEventListener("DOMContentLoaded", function () {
         // Redirect to create.html when "Add Data" button is clicked
         window.location.href = 'create/create.html';
     });
-
 
 });
