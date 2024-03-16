@@ -32,6 +32,7 @@
         <input type="submit" value="Update Data">
     </form>
     <script>
+        const url_api = 'http://192.168.114.134'
         document.addEventListener("DOMContentLoaded", function () {
             // Get stored rowData from sessionStorage
             const rowData = JSON.parse(sessionStorage.getItem('rowData'));
@@ -69,7 +70,7 @@
                 project: formData.get('project')
             };
 
-            fetch(`http://192.168.114.134:5000/data/${id}`, {
+            fetch(`${url_api}:5000/data/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -79,7 +80,7 @@
                 .then(response => {
                     if (response.ok) {
                         alert('Data updated successfully');
-                        window.location.href = 'http://192.168.114.134:3000/'; // Redirect ไปยังหน้า index.html หลังจากการอัปเดตข้อมูลสำเร็จ
+                        window.location.href = `${url_api}:3000/`; // Redirect ไปยังหน้า index.html หลังจากการอัปเดตข้อมูลสำเร็จ
                     } else {
                         throw new Error('Failed to update data');
                     }
