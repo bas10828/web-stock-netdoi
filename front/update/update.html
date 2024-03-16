@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Data</title>
+</head>
+
+<body>
+    <h2>Update Data</h2>
+    <form id="updateForm">
+        <input type="hidden" id="id" name="id">
+        <label for="proid">proid:</label>
+        <input type="text" id="proid" name="proid"><br><br>
+        <label for="serial">Serial:</label>
+        <input type="text" id="serial" name="serial"><br><br>
+        <label for="mac">MAC:</label>
+        <input type="text" id="mac" name="mac"><br><br>
+        <label for="status_stock">Status Stock:</label>
+        <input type="text" id="status_stock" name="status_stock"><br><br>
+        <label for="lot_stock">Lot Stock:</label>
+        <input type="text" id="lot_stock" name="lot_stock"><br><br>
+        <label for="price">Price:</label>
+        <input type="text" id="price" name="price"><br><br>
+        <label for="brand">Brand:</label>
+        <input type="text" id="brand" name="brand"><br><br>
+        <label for="model">Model:</label>
+        <input type="text" id="model" name="model"><br><br>
+        <label for="project">Project:</label>
+        <input type="text" id="project" name="project"><br><br>
+        <input type="submit" value="Update Data">
+    </form>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get stored rowData from sessionStorage
+            const rowData = JSON.parse(sessionStorage.getItem('rowData'));
+
+            // Populate form fields with rowData
+            document.getElementById('id').value = rowData.id;
+            document.getElementById('proid').value = rowData.proid;
+            document.getElementById('serial').value = rowData.serial;
+            document.getElementById('mac').value = rowData.mac;
+            document.getElementById('status_stock').value = rowData.status_stock;
+            document.getElementById('lot_stock').value = rowData.lot_stock;
+            document.getElementById('price').value = rowData.price;
+            document.getElementById('brand').value = rowData.brand;
+            document.getElementById('model').value = rowData.model;
+            document.getElementById('project').value = rowData.project;
+        });
+
+        // Handle form submission
+        document.getElementById('updateForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const id = formData.get('id');
+
+            // สร้าง Object ที่มีโครงสร้างข้อมูลตามที่ต้องการ
+            const data = {
+                proid: formData.get('proid'),
+                serial: formData.get('serial'),
+                mac: formData.get('mac'),
+                status_stock: formData.get('status_stock'),
+                lot_stock: formData.get('lot_stock'),
+                price: parseInt(formData.get('price')), // แปลงข้อมูลราคาเป็นชนิด Number
+                brand: formData.get('brand'),
+                model: formData.get('model'),
+                project: formData.get('project')
+            };
+
+            fetch(`http://192.168.114.134:5000/data/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Data updated successfully');
+                        window.location.href = 'http://192.168.114.134:3000/'; // Redirect ไปยังหน้า index.html หลังจากการอัปเดตข้อมูลสำเร็จ
+                    } else {
+                        throw new Error('Failed to update data');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating data:', error);
+                    alert('Failed to update data. Please try again.');
+                });
+        });
+
+    </script>
+</body>
+
+</html>

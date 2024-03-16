@@ -24,6 +24,11 @@ app.get('/create/create.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'create', 'create.html'));
 });
 
+// Serve update.html
+app.get('/update/update.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'update', 'update.html'));
+});
+
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

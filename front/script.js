@@ -31,15 +31,40 @@ document.addEventListener("DOMContentLoaded", function () {
             <td>${item.lot_stock}</td>
             <td>${item.status_stock}</td>
             <td><button class="deleteBtn">Delete</button></td>
+            <td><button class="updateBtn">Edit</button></td>
         `;
         tableBody.appendChild(row);
     }
 
-    // Add event listener for the "Delete" buttons
+
+
+    // Add event listener for the "Delete" and "edit" buttons
     tableBody.addEventListener('click', function (event) {
         if (event.target.classList.contains('deleteBtn')) {
             const id = event.target.closest('tr').id.split('-')[1];
             deleteData(id);
+        } else if (event.target.classList.contains('updateBtn')) {
+            const row = event.target.closest('tr');
+            const rowData = {
+                id: row.querySelector('td:nth-child(1)').textContent,
+                proid: row.querySelector('td:nth-child(2)').textContent,
+                brand: row.querySelector('td:nth-child(3)').textContent,
+                model: row.querySelector('td:nth-child(4)').textContent,
+                price: row.querySelector('td:nth-child(5)').textContent,
+                serial: row.querySelector('td:nth-child(6)').textContent,
+                mac: row.querySelector('td:nth-child(7)').textContent,
+                project: row.querySelector('td:nth-child(8)').textContent,
+                lot_stock: row.querySelector('td:nth-child(9)').textContent,
+                status_stock: row.querySelector('td:nth-child(10)').textContent
+            };
+
+            // Store rowData in sessionStorage to pass to update.html
+            sessionStorage.setItem('rowData', JSON.stringify(rowData));
+
+            // Redirect to update.html with the id as parameter
+            const id = rowData.id;
+            // console.log(rowData)
+            window.location.href = `${url_api}:3000/update/update.html?id=${id}`;
         }
     });
 
