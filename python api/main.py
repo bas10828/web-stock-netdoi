@@ -6,6 +6,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/data/*": {"origins": "http://192.168.114.134:3000"}})
 
 
+
 # เชื่อมต่อกับ MySQL Server
 connection = mysql.connector.connect(
     host="localhost",
