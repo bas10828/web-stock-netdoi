@@ -2,11 +2,10 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import mysql.connector
 
+url_api = "http://192.168.114.134"
+
 app = Flask(__name__)
-CORS(app, resources={r"/data/*": {"origins": "http://192.168.114.134:3000"}})
-
-
-
+CORS(app, resources={r"/data/*": {"origins": ["http://localhost:3000", url_api + ":3000"]}})
 # เชื่อมต่อกับ MySQL Server
 connection = mysql.connector.connect(
     host="localhost",
@@ -24,7 +23,7 @@ def create_data():
     cursor.execute(query, (data['proid'], data['serial'], data['mac'], data['status_stock'], data['lot_stock'], data['price'], data['brand'], data['model'], data['project']))
     connection.commit()
     cursor.close()
-    return 'Data created successfully', 201, {'Access-Control-Allow-Origin': 'http://192.168.114.134:3000'}
+    return 'Data created successfully', 201, {'Access-Control-Allow-Origin': url_api + ':3000'}
 
 # Read (อ่านข้อมูล)
 @app.route('/data', methods=['GET'])
@@ -44,7 +43,7 @@ def update_data(id):
     cursor.execute(query, (data['proid'], data['serial'], data['mac'], data['status_stock'], data['lot_stock'], data['price'], data['brand'], data['model'], data['project'], id))
     connection.commit()
     cursor.close()
-    return 'Data updated successfully', 200, {'Access-Control-Allow-Origin': 'http://192.168.114.134:3000'}
+    return 'Data updated successfully', 200, {'Access-Control-Allow-Origin':url_api + ':3000'}
 
 # Delete (ลบข้อมูล)
 @app.route('/data/<int:id>', methods=['DELETE'])
@@ -54,7 +53,7 @@ def delete_data(id):
     cursor.execute(query, (id,))
     connection.commit()
     cursor.close()
-    return 'Data deleted successfully', 200, {'Access-Control-Allow-Origin': 'http://192.168.114.134:3000'}
+    return 'Data deleted successfully', 200, {'Access-Control-Allow-Origin': url_api + ':3000'}
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

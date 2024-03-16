@@ -116,6 +116,7 @@
     </section>
 
     <script>
+        const url_api = 'http://192.168.114.134'
         // ตรวจสอบและป้องกันการ submit ฟอร์มเมื่อกด Enter
         document.getElementById('createForm').addEventListener('keydown', function(event) {
             if (event.key === "Enter") {
@@ -140,7 +141,7 @@
             };
 
             // Send POST request to the API
-            fetch('http://192.168.114.134:5000/data', {
+            fetch(`${url_api}:5000/data`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -152,12 +153,12 @@
                     console.log('New data created:', data);
                     alert('New data created successfully!');
                     // Redirect to index.html
-                    window.location.href = 'http://192.168.114.134:3000';
+                    window.location.href = `${url_api}:3000`;
                 })
                 .catch(error => {
                     console.error('Error creating new data:', error);
                     document.getElementById('error-message').innerText = 'Failed to create new data. Please try again.';
-                    window.location.href = 'http://192.168.114.134:3000';
+                    window.location.href = `${url_api}:3000`;
 
                 });
         });
