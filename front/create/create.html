@@ -108,6 +108,9 @@
                     <label for="lot_stock">Lot Stock:</label>
                     <input type="text" id="lot_stock" name="lot_stock">
 
+                    <label for="repeat">repeat:</label>
+                    <input type="text" id="repeat" name="repeat" value="1">
+
                     <input type="submit" value="Submit" class="submit">
                     <span class="error-message" id="error-message"></span>
                 </form>
@@ -118,7 +121,7 @@
     <script>
         const url_api = 'http://192.168.114.134'
         // ตรวจสอบและป้องกันการ submit ฟอร์มเมื่อกด Enter
-        document.getElementById('createForm').addEventListener('keydown', function(event) {
+        document.getElementById('createForm').addEventListener('keydown', function (event) {
             if (event.key === "Enter") {
                 event.preventDefault(); // ป้องกันการ submit ของฟอร์ม
             }
@@ -126,6 +129,9 @@
 
         document.getElementById('createForm').addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent the form from submitting normally
+
+            const repeatCount = document.getElementById('repeat').value; // จำนวนรายการที่ต้องการเพิ่ม
+            
 
             // Collect form data
             const formData = {
@@ -140,28 +146,34 @@
                 status_stock: "in stock"
             };
 
+            // สร้างอาร์เรย์ข้อมูลที่เหมือนกันตามจำนวนที่ระบุ
+            const postData = [];
+            
+            for (let i = 0; i < repeatCount; i++) {
+                postData.push(Object.assign({}, formData)); // เพิ่มข้อมูลที่เหมือนกันในอาร์เรย์ postData
+            }
+
             // Send POST request to the API
             fetch(`${url_api}:5000/data`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(postData) // ส่งข้อมูลในรูปแบบ JSON ไปยังเซิร์ฟเวอร์
             })
                 .then(response => response.json())
                 .then(data => {
                     console.log('New data created:', data);
                     alert('New data created successfully!');
-                    // Redirect to index.html
-                    window.location.href = `${url_api}:3000`;
+                    window.location.href = `${url_api}:3000`; // Redirect หน้าไปที่ URL ที่กำหนด
                 })
                 .catch(error => {
                     console.error('Error creating new data:', error);
                     document.getElementById('error-message').innerText = 'Failed to create new data. Please try again.';
-                    window.location.href = `${url_api}:3000`;
-
+                    window.location.href = `${url_api}:3000`; // Redirect หน้าไปที่ URL ที่กำหนด
                 });
         });
+
     </script>
 </body>
 

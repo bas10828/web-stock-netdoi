@@ -18,12 +18,17 @@ connection = mysql.connector.connect(
 @app.route('/data', methods=['POST'])
 def create_data():
     data = request.json  # รับข้อมูลที่ส่งมาจากแอปพลิเคชัน
-    cursor = connection.cursor()
-    query = "INSERT INTO equipment (proid, serial, mac, status_stock, lot_stock, price, brand, model, project) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    cursor.execute(query, (data['proid'], data['serial'], data['mac'], data['status_stock'], data['lot_stock'], data['price'], data['brand'], data['model'], data['project']))
-    connection.commit()
-    cursor.close()
+
+    # วน loop เพื่อเพิ่มข้อมูลทีละรายการ
+    for item in data:
+        cursor = connection.cursor()
+        query = "INSERT INTO equipment (proid, serial, mac, status_stock, lot_stock, price, brand, model, project) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (item['proid'], item['serial'], item['mac'], item['status_stock'], item['lot_stock'], item['price'], item['brand'], item['model'], item['project']))
+        connection.commit()
+        cursor.close()
+    
     return 'Data created successfully', 201, {'Access-Control-Allow-Origin': url_api + ':3000'}
+
 
 # Read (อ่านข้อมูล)
 @app.route('/data', methods=['GET'])
