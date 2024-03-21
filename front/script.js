@@ -13,6 +13,8 @@ function w3_close() {
 
 document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.getElementById('tableBody');
+    const pageSelector = document.getElementById('pageSelector');
+    const searchBrandDiv = document.getElementById('searchBrand'); // Add this line
 
     fetch(`${url_api}:5000/instock`)
         .then(response => response.json())
@@ -183,6 +185,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 <th>In Stock</th>
                 <th>Sold Out</th>
             `;
+            // searchBrandDiv.style.display = 'none'; // Hide search input field
+        } else if (page === 'searchBrand') {
+            searchBrandDiv.style.display = 'block'; // Show search input field
+            return; // Stop execution as we don't need to fetch data for search page
         }
 
         // Fetch data based on the selected option
@@ -200,6 +206,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error('Error fetching data:', error);
             });
     }
+    // Function to search data by brand name
+    function searchByBrand() {
+        const brandInput = document.getElementById('brandInput').value;
+        if (brandInput.trim() !== '') {
+            // Fetch data based on the selected option
+            fetch(`${url_api}:5000/searchBrand/${brandInput}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Clear the table
+                    tableBody.innerHTML = '';
+                    // Loop through each item in the data array and create a table row for it
+                    data.forEach(item => {
+                        appendTableRow(item);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        } else {
+            alert('Please enter a brand name');
+        }
+    }
 
+    // Fetch initial data when the page loads
+    navigateToPage('instock');
 
 });

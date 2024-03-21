@@ -72,21 +72,27 @@
     </table>
 
     <!-- Sidebar/menu -->
-    <!-- Sidebar/menu -->
     <nav class="w3-sidebar w3-bar-block w3-black w3-animate-right w3-top w3-text-light-grey w3-large"
         style="z-index:3;width:250px;font-weight:bold;display:none;right:0;" id="mySidebar">
         <a href="javascript:void()" onclick="w3_close()" class="w3-bar-item w3-button w3-center w3-padding-32">CLOSE</a>
-        <select onchange="navigateToPage(this.value)" class="w3-bar-item w3-button w3-center w3-padding-16">
+        <select id="pageSelector" class="w3-bar-item w3-button w3-center w3-padding-16">
             <option value="">Select Page</option>
-            <option value="#portfolio">Portfolio</option>
-            <option value="#about">About Me</option>
-            <option value="#contact">Contact</option>
+            <option value="all">all data</option>
+            <option value="instock">in stock</option>
+            <option value="soldout">sold out</option>
+            <option value="countmodel">count model</option>
+            <option value="searchBrand">search brand</option>
         </select>
+        <!-- Input field for search -->
+        <div id="searchBrand" style="display: none;">
+            <input type="text" id="brandInput" placeholder="Enter brand name">
+            <button onclick="searchByBrand()">Search</button>
+        </div>
     </nav>
 
     <!-- Top menu on small screens -->
     <header class="w3-container w3-top w3-white w3-xlarge w3-padding-16">
-        <span class="w3-left w3-padding">SOME NAME</span>
+        <span class="w3-left w3-padding">Stock</span>
         <a href="javascript:void(0)" class="w3-right w3-button w3-white" onclick="w3_open()">☰</a>
     </header>
 
@@ -96,20 +102,92 @@
 
     <!-- End page content -->
     <script>
-        // Script to open and close sidebar
-        function w3_open() {
-            document.getElementById("mySidebar").style.display = "block";
-            document.getElementById("myOverlay").style.display = "block";
+        // Function to navigate to different pages based on the selected option
+        function navigateToPage(page) {
+            let apiUrl;
+            const tableHead = document.querySelector('thead tr');
+            const searchBrandDiv = document.getElementById('searchBrand'); // Define searchBrandDiv
+            if (page === 'all') {
+                apiUrl = `${url_api}:5000/data`;
+                tableHead.innerHTML = `
+            <th>ID</th>
+            <th>proid</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Price</th>
+            <th>Serial</th>
+            <th>mac</th>
+            <th>Project</th>
+            <th>Lot Stock</th>
+            <th>Status Stock</th>
+            <th>Del</th>
+            <th>edit</th>
+        `;
+                searchBrandDiv.style.display = 'none'; // Hide search input field
+            } else if (page === 'instock') {
+                apiUrl = `${url_api}:5000/instock`;
+                searchBrandDiv.style.display = 'none'; // Hide search input field
+            } else if (page === 'soldout') {
+                apiUrl = `${url_api}:5000/soldout`;
+                searchBrandDiv.style.display = 'none'; // Hide search input field
+            } else if (page === 'countmodel') {
+                apiUrl = `${url_api}:5000/countmodel`;
+                tableHead.innerHTML = `
+            <th>Model</th>
+            <th>Total Count</th>
+            <th>In Stock</th>
+            <th>Sold Out</th>
+        `;
+                searchBrandDiv.style.display = 'none'; // Hide search input field
+            } else if (page === 'searchBrand') {
+                searchBrandDiv.style.display = 'block'; // Show search input field
+                return; // Stop execution as we don't need to fetch data for search page
+            }
+
+            // Fetch data based on the selected option
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // Clear the table
+                    tableBody.innerHTML = '';
+                    // Loop through each item in the data array and create a table row for it
+                    data.forEach(item => {
+                        appendTableRow(item);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
         }
 
-        function w3_close() {
-            document.getElementById("mySidebar").style.display = "none";
-            document.getElementById("myOverlay").style.display = "none";
+        // Function to search data by brand name
+        function searchByBrand() {
+            const brandInput = document.getElementById('brandInput').value;
+            if (brandInput.trim
+                () !== '') {
+                // Fetch data based on the selected option
+                fetch(`${url_api}:5000/searchBrand/${brandInput}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Clear the table
+                        tableBody.innerHTML = '';
+                        // Loop through each item in the data array and create a table row for it
+                        data.forEach(item => {
+                            appendTableRow(item);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                    });
+            } else {
+                alert('Please enter a brand name');
+            }
         }
+
+        // Fetch initial data when the page loads
+        navigateToPage('instock');
 
     </script>
-
-
 </body>
 
 </html>
