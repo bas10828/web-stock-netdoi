@@ -29,8 +29,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to append a new row to the table
     function appendTableRow(item) {
         const row = document.createElement('tr');
-        row.id = `row-${item.id}`; // Add id to the row
-        row.innerHTML = `
+        if (pageSelector.value === 'countmodel') {
+            row.innerHTML = `
+            <td>${item.model}</td>
+            <td>${item.total_model}</td>
+            <td>${item.in_stock}</td>
+            <td>${item.sold_out}</td>
+        `;
+        } else {
+            row.innerHTML = `
             <td>${item.id}</td>
             <td>${item.proid}</td>
             <td>${item.brand}</td>
@@ -44,6 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <td><button class="deleteBtn">Delete</button></td>
             <td><button class="updateBtn">Edit</button></td>
         `;
+        }
         tableBody.appendChild(row);
     }
 
@@ -115,19 +123,66 @@ document.addEventListener("DOMContentLoaded", function () {
         navigateToPage(selectedPage);
     });
 
-    // Function to navigate to different pages based on the selected option
-    // Function to navigate to different pages based on the selected option
+    // Fetch data based on the selected option
     function navigateToPage(page) {
         let apiUrl;
+        const tableHead = document.querySelector('thead tr');
         if (page === 'all') {
             apiUrl = `${url_api}:5000/data`;
-            console.log("all");
+            tableHead.innerHTML = `
+                <th>ID</th>
+                <th>proid</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Price</th>
+                <th>Serial</th>
+                <th>mac</th>
+                <th>Project</th>
+                <th>Lot Stock</th>
+                <th>Status Stock</th>
+                <th>Del</th>
+                <th>edit</th>
+            `;
         } else if (page === 'instock') {
             apiUrl = `${url_api}:5000/instock`;
-            console.log("instock");
+            tableHead.innerHTML = `
+                <th>ID</th>
+                <th>proid</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Price</th>
+                <th>Serial</th>
+                <th>mac</th>
+                <th>Project</th>
+                <th>Lot Stock</th>
+                <th>Status Stock</th>
+                <th>Del</th>
+                <th>edit</th>
+            `;
         } else if (page === 'soldout') {
             apiUrl = `${url_api}:5000/soldout`;
-            console.log("soldout");
+            tableHead.innerHTML = `
+                <th>ID</th>
+                <th>proid</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Price</th>
+                <th>Serial</th>
+                <th>mac</th>
+                <th>Project</th>
+                <th>Lot Stock</th>
+                <th>Status Stock</th>
+                <th>Del</th>
+                <th>edit</th>
+            `;
+        } else if (page === 'countmodel') {
+            apiUrl = `${url_api}:5000/countmodel`;
+            tableHead.innerHTML = `
+                <th>Model</th>
+                <th>Total Model</th>
+                <th>In Stock</th>
+                <th>Sold Out</th>
+            `;
         }
 
         // Fetch data based on the selected option

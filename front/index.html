@@ -80,7 +80,14 @@
             <option value="all">all data</option>
             <option value="instock">in stock</option>
             <option value="soldout">sold out</option>
-        </select>        
+            <option value="countmodel">count model</option>
+            <option value="searchBrand">search brand</option>
+        </select>
+        <!-- Input field for search -->
+        <div id="searchBrand" style="display: none;">
+            <input type="text" id="brandInput" placeholder="Enter brand name">
+            <button onclick="searchByBrand()">Search</button>
+        </div>
     </nav>
 
     <!-- Top menu on small screens -->

@@ -47,6 +47,24 @@ def get_soldout_data():
     cursor.close()
     return jsonify(instock_records)
 
+# Read (นับ model ทั้งหมด ที่อยู่ใน stock และ sold out)
+@app.route('/countmodel', methods=['GET'])
+def get_countmodel_data():
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT 
+            model,
+            COUNT(*) AS total_model,
+            SUM(CASE WHEN status_stock = 'in stock' THEN 1 ELSE 0 END) AS in_stock,
+            SUM(CASE WHEN status_stock = 'sold out' THEN 1 ELSE 0 END) AS sold_out
+        FROM 
+            equipment 
+        GROUP BY 
+            model
+    """)
+    countmodel_records = cursor.fetchall()
+    cursor.close()
+    return jsonify(countmodel_records)
 
 # Read (อ่านข้อมูล)
 @app.route('/data', methods=['GET'])
