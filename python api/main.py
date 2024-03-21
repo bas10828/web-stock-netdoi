@@ -5,7 +5,7 @@ import mysql.connector
 url_api = "http://192.168.114.134"
 
 app = Flask(__name__)
-CORS(app, resources={r"/data/*": {"origins": ["http://localhost:3000", url_api + ":3000"]}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 # เชื่อมต่อกับ MySQL Server
 connection = mysql.connector.connect(
     host="localhost",
@@ -29,6 +29,24 @@ def create_data():
     
     return 'Data created successfully', 201, {'Access-Control-Allow-Origin': url_api + ':3000'}
 
+# Read (อ่านข้อมูลที่มี status_stock เป็น "in stock")
+@app.route('/instock', methods=['GET'])
+def get_instock_data():
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM equipment WHERE status_stock = 'in stock'")
+    instock_records = cursor.fetchall()
+    cursor.close()
+    return jsonify(instock_records)
+
+# Read (อ่านข้อมูลที่มี status_stock เป็น "sold out")
+@app.route('/soldout', methods=['GET'])
+def get_soldout_data():
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM equipment WHERE status_stock = 'sold out'")
+    instock_records = cursor.fetchall()
+    cursor.close()
+    return jsonify(instock_records)
+
 
 # Read (อ่านข้อมูล)
 @app.route('/data', methods=['GET'])
@@ -38,6 +56,8 @@ def get_data():
     records = cursor.fetchall()
     cursor.close()
     return jsonify(records)
+
+
 
 # Update (อัปเดตข้อมูล)
 @app.route('/data/<int:id>', methods=['PUT'])

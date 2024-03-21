@@ -72,20 +72,21 @@
     </table>
 
     <!-- Sidebar/menu -->
+    <!-- Sidebar/menu -->
     <nav class="w3-sidebar w3-bar-block w3-black w3-animate-right w3-top w3-text-light-grey w3-large"
         style="z-index:3;width:250px;font-weight:bold;display:none;right:0;" id="mySidebar">
         <a href="javascript:void()" onclick="w3_close()" class="w3-bar-item w3-button w3-center w3-padding-32">CLOSE</a>
-        <select id="pageSelector" class="w3-bar-item w3-button w3-center w3-padding-16">
+        <select onchange="navigateToPage(this.value)" class="w3-bar-item w3-button w3-center w3-padding-16">
             <option value="">Select Page</option>
-            <option value="all">all data</option>
-            <option value="instock">in stock</option>
-            <option value="soldout">sold out</option>
-        </select>        
+            <option value="#portfolio">Portfolio</option>
+            <option value="#about">About Me</option>
+            <option value="#contact">Contact</option>
+        </select>
     </nav>
 
     <!-- Top menu on small screens -->
     <header class="w3-container w3-top w3-white w3-xlarge w3-padding-16">
-        <span class="w3-left w3-padding">Stock</span>
+        <span class="w3-left w3-padding">SOME NAME</span>
         <a href="javascript:void(0)" class="w3-right w3-button w3-white" onclick="w3_open()">☰</a>
     </header>
 
@@ -94,7 +95,19 @@
         id="myOverlay"></div>
 
     <!-- End page content -->
-    <script src="script.js"></script>
+    <script>
+        // Script to open and close sidebar
+        function w3_open() {
+            document.getElementById("mySidebar").style.display = "block";
+            document.getElementById("myOverlay").style.display = "block";
+        }
+
+        function w3_close() {
+            document.getElementById("mySidebar").style.display = "none";
+            document.getElementById("myOverlay").style.display = "none";
+        }
+
+    </script>
 
 
 </body>

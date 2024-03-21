@@ -1,9 +1,20 @@
 const url_api = 'http://192.168.114.134'
 
+// Script to open and close sidebar
+function w3_open() {
+    document.getElementById("mySidebar").style.display = "block";
+    document.getElementById("myOverlay").style.display = "block";
+}
+
+function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+    document.getElementById("myOverlay").style.display = "none";
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.getElementById('tableBody');
 
-    fetch(`${url_api}:5000/data`)
+    fetch(`${url_api}:5000/instock`)
         .then(response => response.json())
         .then(data => {
             // Loop through each item in the data array and create a table row for it
@@ -96,5 +107,44 @@ document.addEventListener("DOMContentLoaded", function () {
         // Redirect to create.html when "Add Data" button is clicked
         window.location.href = 'create/create.html';
     });
+
+
+    // Add event listener for the page selector
+    pageSelector.addEventListener('change', function () {
+        const selectedPage = pageSelector.value;
+        navigateToPage(selectedPage);
+    });
+
+    // Function to navigate to different pages based on the selected option
+    // Function to navigate to different pages based on the selected option
+    function navigateToPage(page) {
+        let apiUrl;
+        if (page === 'all') {
+            apiUrl = `${url_api}:5000/data`;
+            console.log("all");
+        } else if (page === 'instock') {
+            apiUrl = `${url_api}:5000/instock`;
+            console.log("instock");
+        } else if (page === 'soldout') {
+            apiUrl = `${url_api}:5000/soldout`;
+            console.log("soldout");
+        }
+
+        // Fetch data based on the selected option
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                // Clear the table
+                tableBody.innerHTML = '';
+                // Loop through each item in the data array and create a table row for it
+                data.forEach(item => {
+                    appendTableRow(item);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+
 
 });
