@@ -11,6 +11,53 @@ function w3_close() {
     document.getElementById("myOverlay").style.display = "none";
 }
 
+function closesearchByBrand() {
+    document.getElementById('searchBrand').style.display = 'none'; // Hide search input field
+}
+
+function searchByBrand() {
+   
+    const brandInput = document.getElementById('brandInput').value.trim(); // รับค่า brand และลบช่องว่างที่อยู่ด้านหน้าและด้านหลัง
+    if (brandInput !== '') { // ตรวจสอบว่าค่า brand ไม่เป็นค่าว่าง
+        fetch(`${url_api}:5000/countmodel/${brandInput}`) // เรียกใช้ API สำหรับการค้นหาจำนวน model โดยใส่ brandInput เป็นพารามิเตอร์
+            .then(response => response.json())
+            .then(data => {
+                // Clear the table
+                const tableBody = document.getElementById('tableBody');
+                tableBody.innerHTML = '';
+
+                // Set table header
+                const tableHead = document.querySelector('thead tr');
+                tableHead.innerHTML = `
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Total Model</th>
+                    <th>In Stock</th>
+                    <th>Sold Out</th>
+                `;
+
+                // Loop through each item in the data array and create a table row for it
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.brand}</td>
+                        <td>${item.model}</td>
+                        <td>${item.total_model}</td>
+                        <td>${item.in_stock}</td>
+                        <td>${item.sold_out}</td>                       
+                    `;
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                alert('Failed to fetch data. Please try again.');
+            });
+    } else {
+        alert('Please enter a brand name');
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.getElementById('tableBody');
     const pageSelector = document.getElementById('pageSelector');
@@ -33,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const row = document.createElement('tr');
         if (pageSelector.value === 'countmodel') {
             row.innerHTML = `
+            <td>${item.brand}</td>
             <td>${item.model}</td>
             <td>${item.total_model}</td>
             <td>${item.in_stock}</td>
@@ -133,7 +181,7 @@ document.addEventListener("DOMContentLoaded", function () {
             apiUrl = `${url_api}:5000/data`;
             tableHead.innerHTML = `
                 <th>ID</th>
-                <th>proid</th>
+                <th>product id</th>
                 <th>Brand</th>
                 <th>Model</th>
                 <th>Price</th>
@@ -149,7 +197,7 @@ document.addEventListener("DOMContentLoaded", function () {
             apiUrl = `${url_api}:5000/instock`;
             tableHead.innerHTML = `
                 <th>ID</th>
-                <th>proid</th>
+                <th>product id</th>
                 <th>Brand</th>
                 <th>Model</th>
                 <th>Price</th>
@@ -165,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
             apiUrl = `${url_api}:5000/soldout`;
             tableHead.innerHTML = `
                 <th>ID</th>
-                <th>proid</th>
+                <th>product id</th>
                 <th>Brand</th>
                 <th>Model</th>
                 <th>Price</th>
@@ -180,14 +228,21 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (page === 'countmodel') {
             apiUrl = `${url_api}:5000/countmodel`;
             tableHead.innerHTML = `
+                <th>Brand</th>    
                 <th>Model</th>
                 <th>Total Model</th>
                 <th>In Stock</th>
                 <th>Sold Out</th>
             `;
-            // searchBrandDiv.style.display = 'none'; // Hide search input field
         } else if (page === 'searchBrand') {
             searchBrandDiv.style.display = 'block'; // Show search input field
+            // tableHead.innerHTML = `
+            //     <th>Brand</th>    
+            //     <th>Model</th>
+            //     <th>Total Model</th>
+            //     <th>In Stock</th>
+            //     <th>Sold Out</th>
+            // `;
             return; // Stop execution as we don't need to fetch data for search page
         }
 
@@ -207,27 +262,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
     // Function to search data by brand name
-    function searchByBrand() {
-        const brandInput = document.getElementById('brandInput').value;
-        if (brandInput.trim() !== '') {
-            // Fetch data based on the selected option
-            fetch(`${url_api}:5000/searchBrand/${brandInput}`)
-                .then(response => response.json())
-                .then(data => {
-                    // Clear the table
-                    tableBody.innerHTML = '';
-                    // Loop through each item in the data array and create a table row for it
-                    data.forEach(item => {
-                        appendTableRow(item);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        } else {
-            alert('Please enter a brand name');
-        }
-    }
+
 
     // Fetch initial data when the page loads
     navigateToPage('instock');
