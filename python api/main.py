@@ -14,6 +14,14 @@ connection = mysql.connector.connect(
     database="networkequipment"
 )
 
+@app.after_request
+def after_request(response):
+    response.headers['Access-Control-Allow-Origin'] = 'http://192.168.114.134:3000'
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    return response
+
+
 # Create (สร้างข้อมูลใหม่)
 @app.route('/data', methods=['POST'])
 def create_data():
@@ -67,21 +75,17 @@ def get_countmodel_data():
     return jsonify(countmodel_records)
 
 # Read (อ่านข้อมูลจาก brand)
-@app.route('/countmodel/<brand>', methods=['GET'])
-def get_countmodel_data_by_brand(brand):
+@app.route('/countmodelall/<brand>', methods=['GET'])
+def get_countmodelall_data_by_brand(brand):
     cursor = connection.cursor(dictionary=True)
     cursor.execute("""
         SELECT 
-            brand,model,
-            COUNT(*) AS total_model,
-            SUM(CASE WHEN status_stock = 'in stock' THEN 1 ELSE 0 END) AS in_stock,
-            SUM(CASE WHEN status_stock = 'sold out' THEN 1 ELSE 0 END) AS sold_out
+            *
         FROM 
             equipment 
         WHERE
             brand = %s
-        GROUP BY 
-            model
+        
     """, (brand,))
     countmodel_records = cursor.fetchall()
     cursor.close()

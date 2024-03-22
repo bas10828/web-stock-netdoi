@@ -81,12 +81,18 @@
             <option value="instock">in stock</option>
             <option value="soldout">sold out</option>
             <option value="countmodel">count model</option>
-            <option value="searchBrand">search brand</option>
+            <option value="searchBrand">หาจำนวนของแบรน</option>
+            <option value="searchBrandall">หาแบรนทั้งหมด</option>
         </select>
         <!-- Input field for search -->
         <div id="searchBrand" style="display: none;">
             <input type="text" id="brandInput" placeholder="Enter brand name">
             <button onclick="searchByBrand()">Search</button>
+            <button onclick="closesearchByBrand()">close</button>
+        </div>
+        <div id="searchBrandall" style="display: none;">
+            <input type="text" id="brandallInput" placeholder="Enter brand name">
+            <button onclick="searchByBrandall()">Search</button>
             <button onclick="closesearchByBrand()">close</button>
         </div>
     </nav>
