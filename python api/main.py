@@ -91,6 +91,27 @@ def get_countmodelall_data_by_brand(brand):
     cursor.close()
     return jsonify(countmodel_records)
 
+# Read (อ่านข้อมูลจาก brand)
+@app.route('/countmodel/<brand>', methods=['GET'])
+def get_countmodel_data_by_brand(brand):
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT 
+            brand,model,
+            COUNT(*) AS total_model,
+            SUM(CASE WHEN status_stock = 'in stock' THEN 1 ELSE 0 END) AS in_stock,
+            SUM(CASE WHEN status_stock = 'sold out' THEN 1 ELSE 0 END) AS sold_out
+        FROM 
+            equipment 
+        WHERE
+            brand = %s
+        GROUP BY 
+            model
+    """, (brand,))
+    countmodel_records = cursor.fetchall()
+    cursor.close()
+    return jsonify(countmodel_records)
+
 # Read (อ่านข้อมูล)
 @app.route('/data', methods=['GET'])
 def get_data():
