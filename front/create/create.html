@@ -87,6 +87,9 @@
                     <label for="proid">proid:</label>
                     <input type="text" id="proid" name="proid">
 
+                    <label for="serial">Serial:</label>
+                    <input type="text" id="serial" name="serial">
+
                     <label for="mac">mac:</label>
                     <input type="text" id="mac" name="mac">
 
@@ -99,14 +102,11 @@
                     <label for="price">Price:</label>
                     <input type="text" id="price" name="price">
 
-                    <label for="serial">Serial:</label>
-                    <input type="text" id="serial" name="serial">
+                    <label for="lot_stock">Lot Stock:</label>
+                    <input type="text" id="lot_stock" name="lot_stock">
 
                     <label for="project">Project:</label>
                     <input type="text" id="project" name="project">
-
-                    <label for="lot_stock">Lot Stock:</label>
-                    <input type="text" id="lot_stock" name="lot_stock">
 
                     <label for="repeat">repeat:</label>
                     <input type="text" id="repeat" name="repeat" value="1">
@@ -131,7 +131,7 @@
             event.preventDefault(); // Prevent the form from submitting normally
 
             const repeatCount = document.getElementById('repeat').value; // จำนวนรายการที่ต้องการเพิ่ม
-            
+
 
             // Collect form data
             const formData = {
@@ -148,7 +148,7 @@
 
             // สร้างอาร์เรย์ข้อมูลที่เหมือนกันตามจำนวนที่ระบุ
             const postData = [];
-            
+
             for (let i = 0; i < repeatCount; i++) {
                 postData.push(Object.assign({}, formData)); // เพิ่มข้อมูลที่เหมือนกันในอาร์เรย์ postData
             }

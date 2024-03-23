@@ -16,6 +16,37 @@ function closesearchByBrand() {
     document.getElementById('searchBrandall').style.display = 'none'; // Hide search input field
 }
 
+// Function to delete data
+function deleteData(id) {
+    console.log(id)
+    if (confirm('Are you sure you want to delete this data?')) {
+        fetch(`${url_api}:5000/data/${id}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Remove the row from the table if deletion is successful
+                    const row = document.getElementById(`row-${id}`);
+                    if (row && row.parentNode) { // Check if row exists and has parent node
+                        row.parentNode.removeChild(row);
+                    }
+                    // Reload the page to update the table
+                    location.reload();
+                } else {
+                    throw new Error('Failed to delete data');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting data:', error);
+                if (error.message.includes('Not Found')) {
+                    alert('Data not found. It might have already been deleted.');
+                } else {
+                    alert('Failed to delete data. Please try again.');
+                }
+            });
+    }
+}
+
 // หาจำนวนของ brand
 function searchByBrand() {
 
@@ -61,10 +92,9 @@ function searchByBrand() {
 }
 
 function searchByBrandall() {
-
-    const brandInput = document.getElementById('brandallInput').value.trim(); // รับค่า brand และลบช่องว่างที่อยู่ด้านหน้าและด้านหลัง
-    if (brandInput !== '') { // ตรวจสอบว่าค่า brand ไม่เป็นค่าว่าง
-        fetch(`${url_api}:5000/countmodelall/${brandInput}`) // เรียกใช้ API สำหรับการค้นหาจำนวน model โดยใส่ brandInput เป็นพารามิเตอร์
+    const brandInput = document.getElementById('brandallInput').value.trim();
+    if (brandInput !== '') {
+        fetch(`${url_api}:5000/countmodelall/${brandInput}`)
             .then(response => response.json())
             .then(data => {
                 // Clear the table
@@ -84,29 +114,39 @@ function searchByBrandall() {
                     <th>Project</th>
                     <th>Lot Stock</th>
                     <th>Status Stock</th>
-                    <th>Del</th>
-                    <th>edit</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
                 `;
 
                 // Loop through each item in the data array and create a table row for it
                 data.forEach(item => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                    <td>${item.id}</td>
-                    <td>${item.proid}</td>
-                    <td>${item.brand}</td>
-                    <td>${item.model}</td>
-                    <td>${item.price}</td>
-                    <td>${item.serial}</td>
-                    <td>${item.mac}</td>
-                    <td>${item.project ? item.project : ''}</td>
-                    <td>${item.lot_stock}</td>
-                    <td>${item.status_stock}</td>
-                    <td><button class="deleteBtn">Delete</button></td>
-                    <td><button class="updateBtn">Edit</button></td>                      
+                        <td>${item.id}</td>
+                        <td>${item.proid}</td>
+                        <td>${item.brand}</td>
+                        <td>${item.model}</td>
+                        <td>${item.price}</td>
+                        <td>${item.serial}</td>
+                        <td>${item.mac}</td>
+                        <td>${item.project ? item.project : ''}</td>
+                        <td>${item.lot_stock}</td>
+                        <td>${item.status_stock}</td>
+                        <td><button class="deleteBtnIN" data-id-IN="${item.id}">Delete</button></td>
+                        <td><button class="updateBtn">Edit</button></td>
                     `;
                     tableBody.appendChild(row);
                 });
+
+                // Add event listener for the "Delete" button in searchByBrandall function
+                tableBody.addEventListener('click', function (event) {
+                    if (event.target.classList.contains('deleteBtnIN')) {
+                        const id = event.target.getAttribute('data-id-IN'); // Get the id from data-id attribute
+                        deleteData(id);
+                    }
+                }, { once: true }); // Add { once: true } to ensure this event listener only runs once
+
+
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -116,6 +156,7 @@ function searchByBrandall() {
         alert('Please enter a brand name');
     }
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.getElementById('tableBody');
@@ -204,28 +245,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Function to delete data
-    function deleteData(id) {
-        console.log(id)
-        if (confirm('Are you sure you want to delete this data?')) {
-            fetch(`${url_api}:5000/data/${id}`, {
-                method: 'DELETE'
-            })
-                .then(response => {
-                    if (response.ok) {
-                        // Remove the row from the table if deletion is successful
-                        const row = document.getElementById(`row-${id}`);
-                        row.parentNode.removeChild(row);
-                    } else {
-                        throw new Error('Failed to delete data');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error deleting data:', error);
-                    alert('Failed to delete data. Please try again.');
-                });
-        }
-    }
+
 
     // Add event listener for the "Add Data" button
     const addDataBtn = document.getElementById('addDataBtn');
