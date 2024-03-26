@@ -37,6 +37,7 @@ def create_data():
     
     return 'Data created successfully', 201, {'Access-Control-Allow-Origin': url_api + ':3000'}
 
+
 # Read (อ่านข้อมูลที่มี status_stock เป็น "in stock")
 @app.route('/instock', methods=['GET'])
 def get_instock_data():

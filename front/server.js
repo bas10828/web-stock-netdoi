@@ -24,10 +24,17 @@ app.get('/create/create.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'create', 'create.html'));
 });
 
+// Serve create_dynamic.html
+app.get('/create/create_dynamic.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'create', 'create_dynamic.html'));
+});
+
 // Serve update.html
 app.get('/update/update.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'update', 'update.html'));
 });
+
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;

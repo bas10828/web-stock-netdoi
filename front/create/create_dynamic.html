@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create New Data</title>
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -83,14 +82,12 @@
             color: red;
         }
     </style>
-    
 </head>
 
 <body>
-
+    <h2>Create New Data</h2>
 
     <div class="form-container">
-        <h2>Create New Data</h2>
         <div id="form">
             <form id="createForm" onsubmit="submitForm(event)">
 
@@ -121,6 +118,7 @@
                 <div id="dynamicFields"></div>
                 <button id="addFieldButton" onclick="addField(event)">Add Field</button>
 
+                <br>
                 <input type="submit" value="Submit" class="submit">
                 <span class="error-message" id="error-message"></span>
 
@@ -257,7 +255,6 @@
             // Add the field container to the form with id="form"
             var addButton = document.getElementById('addFieldButton'); // รับอ้างอิงปุ่ม "Add Field"
             addButton.insertAdjacentElement('beforebegin', fieldContainer); // แทรกฟิลด์ใหม่ก่อนปุ่ม "Add Field"
-            
         }
 
 
@@ -317,10 +314,10 @@
                 postData.push(dynamicFormData);
             });
 
-            console.log(postData)
+            console.log(JSON.stringify(postData))
 
             // Send POST request to the API
-            fetch(`${url_api}:5000/datadynamic`, {
+            fetch(`${url_api}:5000/data`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -336,7 +333,7 @@
                 .catch(error => {
                     console.error('Error creating new data:', error);
                     document.getElementById('error-message').innerText = 'Failed to create new data. Please try again.';
-                    // window.location.href = `${url_api}:3000`; // Redirect to the specified URL
+                    window.location.href = `${url_api}:3000`; // Redirect to the specified URL
                 });
         }
 

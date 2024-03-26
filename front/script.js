@@ -254,6 +254,13 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = 'create/create.html';
     });
 
+     // Add event listener for the "Add Data Dynamic" button
+     const addDatadynaminBtn = document.getElementById('addDatadynaminBtn');
+     addDatadynaminBtn.addEventListener('click', function () {
+         // Redirect to create.html when "Add Data" button is clicked
+         window.location.href = 'create/create_dynamic.html';
+     });
+
 
     // Add event listener for the page selector
     pageSelector.addEventListener('change', function () {
