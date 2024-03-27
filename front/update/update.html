@@ -84,31 +84,33 @@
         <form id="updateForm">
             <input type="hidden" id="id" name="id"><br><br> <!-- Add line breaks -->
             <label for="proid" >proid:</label> <!-- Add margin-top -->
-
             <input type="text" id="proid" name="proid"><br><br>
+
             <label for="serial">Serial:</label>
-
             <input type="text" id="serial" name="serial"><br><br>
+
             <label for="mac">MAC:</label>
-
             <input type="text" id="mac" name="mac"><br><br>
+
             <label for="status_stock">Status Stock:</label>
-
             <input type="text" id="status_stock" name="status_stock"><br><br>
-            <label for="lot_stock">Lot Stock:</label>
-            
-            <input type="text" id="lot_stock" name="lot_stock"><br><br>
+
+            <label for="into_stock">In Stock:</label>            
+            <input type="text" id="into_stock" name="into_stock"><br><br>
+
+            <label for="out_stock">Sale date:</label>            
+            <input type="text" id="out_stock" name="out_stock"><br><br>
+
             <label for="price">Price:</label>
-
             <input type="text" id="price" name="price"><br><br>
+
             <label for="brand">Brand:</label>
-
             <input type="text" id="brand" name="brand"><br><br>
-            <label for="model">Model:</label>
 
+            <label for="model">Model:</label>
             <input type="text" id="model" name="model"><br><br>
-            <label for="project">Project:</label>
-            
+
+            <label for="project">Project:</label>            
             <input type="text" id="project" name="project"><br><br>
             <input type="submit" value="Update Data">
         </form>
@@ -125,7 +127,8 @@
             document.getElementById('serial').value = rowData.serial;
             document.getElementById('mac').value = rowData.mac;
             document.getElementById('status_stock').value = rowData.status_stock;
-            document.getElementById('lot_stock').value = rowData.lot_stock;
+            document.getElementById('into_stock').value = rowData.into_stock;
+            document.getElementById('out_stock').value = rowData.out_stock;
             document.getElementById('price').value = rowData.price;
             document.getElementById('brand').value = rowData.brand;
             document.getElementById('model').value = rowData.model;
@@ -145,7 +148,8 @@
                 serial: formData.get('serial'),
                 mac: formData.get('mac'),
                 status_stock: formData.get('status_stock'),
-                lot_stock: formData.get('lot_stock'),
+                into_stock: formData.get('into_stock'),
+                out_stock: formData.get('into_stock'),
                 price: parseInt(formData.get('price')), // แปลงข้อมูลราคาเป็นชนิด Number
                 brand: formData.get('brand'),
                 model: formData.get('model'),

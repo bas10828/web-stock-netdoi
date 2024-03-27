@@ -102,8 +102,11 @@
                     <label for="price">Price:</label>
                     <input type="text" id="price" name="price">
 
-                    <label for="lot_stock">Lot Stock:</label>
-                    <input type="text" id="lot_stock" name="lot_stock">
+                    <label for="lot_stock">In Stock:</label>
+                    <input type="text" id="into_stock" name="into_stock">
+
+                    <label for="out_stock">Sale Date:</label>
+                    <input type="text" id="out_stock" name="out_stock">
 
                     <label for="project">Project:</label>
                     <input type="text" id="project" name="project">
@@ -142,7 +145,8 @@
                 price: document.getElementById('price').value,
                 serial: document.getElementById('serial').value,
                 project: document.getElementById('project').value,
-                lot_stock: document.getElementById('lot_stock').value,
+                into_stock: document.getElementById('into_stock').value,
+                out_stock: document.getElementById('out_stock').value,
                 status_stock: "in stock"
             };
 
