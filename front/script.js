@@ -1,4 +1,4 @@
-const url_api = 'http://192.168.114.134'
+const url_api = 'http://192.168.114.137'
 
 // Script to open and close sidebar
 function w3_open() {

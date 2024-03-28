@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import mysql.connector
 
-url_api = "http://192.168.114.134"
+url_api = "http://192.168.114.137"
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -16,7 +16,7 @@ connection = mysql.connector.connect(
 
 @app.after_request
 def after_request(response):
-    response.headers['Access-Control-Allow-Origin'] = 'http://192.168.114.134:3000'
+    response.headers['Access-Control-Allow-Origin'] = url_api + ':3000'
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     return response
