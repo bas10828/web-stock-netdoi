@@ -29,6 +29,11 @@ app.get('/create/create_dynamic.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'create', 'create_dynamic.html'));
 });
 
+// Serve manage.html
+app.get('/manage_stock/manage.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'manage_stock', 'manage.html'));
+});
+
 // Serve update.html
 app.get('/update/update.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'update', 'update.html'));

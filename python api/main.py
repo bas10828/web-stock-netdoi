@@ -135,6 +135,23 @@ def update_data(id):
     cursor.close()
     return 'Data updated successfully', 200, {'Access-Control-Allow-Origin':url_api + ':3000'}
 
+# Update (อัปเดตข้อมูลสำหรับหลาย ID)
+@app.route('/managestock', methods=['PUT'])
+def update_managestock():
+    data = request.json  # รับข้อมูลที่ส่งมาจากแอปพลิเคชัน
+
+    # วน loop เพื่ออัปเดตข้อมูลสำหรับแต่ละ ID
+    for item_data in data:
+        cursor = connection.cursor()
+        query = "UPDATE equipment SET project=%s, out_stock=%s, status_stock=%s WHERE id=%s"
+        cursor.execute(query, (item_data['project'], item_data['out_stock'], item_data['status_stock'], item_data['id']))
+        connection.commit()
+        cursor.close()
+
+    return 'Data updated successfully', 200, {'Access-Control-Allow-Origin': url_api + ':3000'}
+
+
+
 # Delete (ลบข้อมูล)
 @app.route('/data/<int:id>', methods=['DELETE'])
 def delete_data(id):

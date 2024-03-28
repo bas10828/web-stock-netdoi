@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Page</title>
+</head>
+
+<body>
+    <h1>Manage Stock</h1>
+    <form id="manageForm">
+        <label for="project">Project:</label>
+        <input type="text" id="project" name="project"><br><br>
+        <label for="out_stock">Out Stock:</label>
+        <input type="text" id="out_stock" name="out_stock"><br><br>
+        <label for="status_stock">Status Stock:</label>
+        <select id="status_stock" name="status_stock">
+            <option value="Sold Out">Sold Out</option>
+            <option value="In Stock">In Stock</option>
+        </select><br><br>
+        <button type="submit">Update</button>
+    </form>
+
+
+    <script>
+        const url_api = 'http://192.168.114.137'
+
+        // Get selectedRowIds from sessionStorage
+        const selectedRowIds = JSON.parse(sessionStorage.getItem('selectedRowIds'));
+
+        // Use selectedRowIds as needed
+        console.log("Selected Row IDs:", selectedRowIds);
+
+        // เรียกใช้งานฟังก์ชันเมื่อกดปุ่ม "อัปเดต"
+        document.getElementById('manageForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // ป้องกันการรีโหลดหน้า
+
+            updateDataInDatabase();
+        });
+
+
+        function updateDataInDatabase() {
+            const selectedRowIds = JSON.parse(sessionStorage.getItem('selectedRowIds'));
+
+            // ดึงค่าจากฟอร์ม
+            const project = document.getElementById('project').value;
+            const out_stock = document.getElementById('out_stock').value;
+            const status_stock = document.getElementById('status_stock').value;
+
+            // สร้างตัวแปร formDataArray เพื่อเก็บข้อมูลที่จะส่งไปยัง API
+            const formDataArray = [];
+
+            // วนลูปผ่าน ID ที่เลือก
+            selectedRowIds.forEach(id => {
+                // เตรียมข้อมูลที่จะส่งไปยัง API สำหรับแต่ละ ID
+                const formData = {
+                    id: id,
+                    project: project,
+                    out_stock: out_stock,
+                    status_stock: status_stock
+                };
+
+                // เพิ่ม formData ลงใน formDataArray
+                formDataArray.push(formData);
+            });
+
+            // ส่งข้อมูลไปยัง API สำหรับการอัปเดต
+            fetch(`${url_api}:5000/managestock`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formDataArray) // ส่ง formDataArray แทน formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Data updated successfully');
+                        alert('New data created successfully!');
+                        window.location.href = `${url_api}:3000`; // Redirect หน้าไปที่ URL ที่กำหนด
+
+                    } else {
+                        console.error('Failed to update data');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating data:', error);
+                });
+        }
+
+
+
+    </script>
+</body>
+
+</html>

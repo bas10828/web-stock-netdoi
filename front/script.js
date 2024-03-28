@@ -319,6 +319,14 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = 'create/create_dynamic.html';
     });
 
+    // Add event listener for the "Add Data Dynamic" button
+    const managestockBtn = document.getElementById('managestockBtn');
+    managestockBtn.addEventListener('click', function () {
+        // Redirect to create.html when "Add Data" button is clicked
+        sessionStorage.setItem('selectedRowIds', JSON.stringify(selectedRowIds));
+        window.location.href = 'manage_stock/manage.html';
+    });
+
 
     // Add event listener for the page selector
     pageSelector.addEventListener('change', function () {
