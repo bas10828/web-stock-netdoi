@@ -318,15 +318,15 @@
 
             dynamicFields.forEach(fieldContainer => {
                 const dynamicFormData = {
-                    proid: fieldContainer.querySelector('input[name="proid_' + fieldCounter + '"]').value,
-                    mac: fieldContainer.querySelector('input[name="mac_' + fieldCounter + '"]').value,
-                    brand: fieldContainer.querySelector('input[name="brand_' + fieldCounter + '"]').value,
-                    model: fieldContainer.querySelector('input[name="model_' + fieldCounter + '"]').value,
-                    price: fieldContainer.querySelector('input[name="price_' + fieldCounter + '"]').value,
-                    serial: fieldContainer.querySelector('input[name="serial_' + fieldCounter + '"]').value,
-                    project: fieldContainer.querySelector('input[name="project_' + fieldCounter + '"]').value,
-                    into_stock: fieldContainer.querySelector('input[name="in_stock_' + fieldCounter + '"]').value,
-                    out_stock: fieldContainer.querySelector('input[name="out_stock_' + fieldCounter + '"]').value,
+                    proid: fieldContainer.querySelector('input[name^="proid"]').value,
+                    mac: fieldContainer.querySelector('input[name^="mac"]').value,
+                    brand: fieldContainer.querySelector('input[name^="brand"]').value,
+                    model: fieldContainer.querySelector('input[name^="model"]').value,
+                    price: fieldContainer.querySelector('input[name^="price"]').value,
+                    serial: fieldContainer.querySelector('input[name^="serial"]').value,
+                    project: fieldContainer.querySelector('input[name^="project"]').value,
+                    into_stock: fieldContainer.querySelector('input[name^="in_stock"]').value,
+                    out_stock: fieldContainer.querySelector('input[name^="out_stock"]').value,
                     status_stock: "in stock"
                 };
                 postData.push(dynamicFormData);
