@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import mysql.connector
 
-url_api = "http://192.168.114.137"
+url_api = "http://192.168.114.136"
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})

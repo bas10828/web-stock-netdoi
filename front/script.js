@@ -1,4 +1,4 @@
-const url_api = 'http://192.168.114.137'
+const url_api = 'http://192.168.114.136'
 
 // Script to open and close sidebar
 function w3_open() {
@@ -52,7 +52,8 @@ function deleteData(id) {
 // หาอุปกรณ์ทั้งหมดของ project
 function searchByProject(){
     const projectInput = document.getElementById('projectInput').value.trim();
-    if (Input !== '') {
+    console.log(projectInput)
+    if (projectInput !== '') {
         fetch(`${url_api}:5000/searchproject/${projectInput}`)
             .then(response => response.json())
             .then(data => {
@@ -100,23 +101,14 @@ function searchByProject(){
                     `;
                     tableBody.appendChild(row);
                 });
-
-                // Add event listener for the "Toggle" button in searchByBrandall function
-                tableBody.addEventListener('click', function (event) {
-                    if (event.target.classList.contains('toggleBtn')) {
-                        // console.log("toggle")
-                        toggleCheckbox(event);
-
-                    }
-                });
-
+            
                 // Add event listener for the "Delete" button in searchByBrandall function
                 tableBody.addEventListener('click', function (event) {
                     if (event.target.classList.contains('deleteBtnIN')) {
                         const id = event.target.getAttribute('data-id-IN'); // Get the id from data-id attribute
                         deleteData(id);
                     }
-                }, { once: true });
+                });
 
             })
             .catch(error => {
@@ -180,6 +172,7 @@ const selectedRowIds = [];
 function toggleCheckbox(event) {
     const button = event.target; // Get the clicked button
     const row = button.closest('tr'); // Find the closest table row to the clicked button
+    console.log("console",row)
 
     if (row) {
         const id = row.querySelector('td:nth-child(2)').textContent; // Get the ID from the second column of the row
@@ -259,14 +252,7 @@ function searchByBrandall() {
                     tableBody.appendChild(row);
                 });
 
-                // Add event listener for the "Toggle" button in searchByBrandall function
-                tableBody.addEventListener('click', function (event) {
-                    if (event.target.classList.contains('toggleBtn')) {
-                        // console.log("toggle")
-                        toggleCheckbox(event);
-
-                    }
-                });
+                
 
                 // Add event listener for the "Delete" button in searchByBrandall function
                 tableBody.addEventListener('click', function (event) {
@@ -274,7 +260,7 @@ function searchByBrandall() {
                         const id = event.target.getAttribute('data-id-IN'); // Get the id from data-id attribute
                         deleteData(id);
                     }
-                }, { once: true });
+                });
 
             })
             .catch(error => {
@@ -358,7 +344,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const id = event.target.closest('tr').id.split('-')[1];
             console.log("id=", id)
             deleteData(id);
-        } else if (event.target.classList.contains('updateBtn')) {
+        } if (event.target.classList.contains('updateBtn')) {
             const row = event.target.closest('tr');
             const rowData = {
                 id: row.querySelector('td:nth-child(2)').textContent,
