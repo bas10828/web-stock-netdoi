@@ -11,9 +11,11 @@ function w3_close() {
     document.getElementById("myOverlay").style.display = "none";
 }
 
-function closesearchByBrand() {
+function closesearch() {
     document.getElementById('searchBrand').style.display = 'none'; // Hide search input field
     document.getElementById('searchBrandall').style.display = 'none'; // Hide search input field
+    document.getElementById('searchProject').style.display = 'none'; // Hide search input field
+
 }
 
 // Function to delete data
@@ -44,6 +46,85 @@ function deleteData(id) {
                     alert('Failed to delete data. Please try again.');
                 }
             });
+    }
+}
+
+// หาอุปกรณ์ทั้งหมดของ project
+function searchByProject(){
+    const projectInput = document.getElementById('projectInput').value.trim();
+    if (Input !== '') {
+        fetch(`${url_api}:5000/searchproject/${projectInput}`)
+            .then(response => response.json())
+            .then(data => {
+                // Clear the table
+                const tableBody = document.getElementById('tableBody');
+                tableBody.innerHTML = '';
+
+                // Set table header
+                const tableHead = document.querySelector('thead tr');
+                tableHead.innerHTML = `
+                    <th>Toggle</th>
+                    <th>ID</th>
+                    <th>product id</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Price</th>
+                    <th>Serial</th>
+                    <th>mac</th>
+                    <th>Project</th>
+                    <th>In Stock</th>
+                    <th>Sale Out</th>
+                    <th>Status Stock</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                `;
+
+                // Loop through each item in the data array and create a table row for it
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><button class="toggleBtn" data-row-id="${item.id}"></button></td>
+                        <td>${item.id}</td>
+                        <td>${item.proid}</td>
+                        <td>${item.brand}</td>
+                        <td>${item.model}</td>
+                        <td>${item.price}</td>
+                        <td>${item.serial}</td>
+                        <td>${item.mac}</td>
+                        <td>${item.project ? item.project : ''}</td>
+                        <td>${item.into_stock}</td>
+                        <td>${item.out_stock}</td>
+                        <td>${item.status_stock}</td>
+                        <td><button class="deleteBtnIN" data-id-IN="${item.id}">Delete</button></td>
+                        <td><button class="updateBtn">Edit</button></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                // Add event listener for the "Toggle" button in searchByBrandall function
+                tableBody.addEventListener('click', function (event) {
+                    if (event.target.classList.contains('toggleBtn')) {
+                        // console.log("toggle")
+                        toggleCheckbox(event);
+
+                    }
+                });
+
+                // Add event listener for the "Delete" button in searchByBrandall function
+                tableBody.addEventListener('click', function (event) {
+                    if (event.target.classList.contains('deleteBtnIN')) {
+                        const id = event.target.getAttribute('data-id-IN'); // Get the id from data-id attribute
+                        deleteData(id);
+                    }
+                }, { once: true });
+
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                alert('Failed to fetch data. Please try again.');
+            });
+    } else {
+        alert('Please enter a project name');
     }
 }
 
@@ -126,7 +207,7 @@ function toggleCheckbox(event) {
     console.log("Selected Row IDs:", selectedRowIds);
 }
 
-
+//หา brand ทั้งหมดตามข้อมูลที่ป้อน
 function searchByBrandall() {
     const brandInput = document.getElementById('brandallInput').value.trim();
     if (brandInput !== '') {
@@ -211,7 +292,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const pageSelector = document.getElementById('pageSelector');
     const searchBrandDiv = document.getElementById('searchBrand'); // Add this line
     const searchBrandallDiv = document.getElementById('searchBrandall'); // Add this line
-
+    const searchprojectDiv = document.getElementById('searchProject');
 
     fetch(`${url_api}:5000/instock`)
         .then(response => response.json())
@@ -345,7 +426,8 @@ document.addEventListener("DOMContentLoaded", function () {
             selectedRowIds.length = 0;
             apiUrl = `${url_api}:5000/data`;
             tableHead.innerHTML = `
-                <th>Toggle</th>                <th>ID</th>
+                <th>Toggle</th>                
+                <th>ID</th>
                 <th>product id</th>
                 <th>Brand</th>
                 <th>Model</th>
@@ -363,7 +445,8 @@ document.addEventListener("DOMContentLoaded", function () {
             selectedRowIds.length = 0;
             apiUrl = `${url_api}:5000/instock`;
             tableHead.innerHTML = `
-                <th>Toggle</th>                <th>ID</th>
+                <th>Toggle</th>                
+                <th>ID</th>
                 <th>product id</th>
                 <th>Brand</th>
                 <th>Model</th>
@@ -381,7 +464,8 @@ document.addEventListener("DOMContentLoaded", function () {
             selectedRowIds.length = 0;
             apiUrl = `${url_api}:5000/soldout`;
             tableHead.innerHTML = `
-                <th>Toggle</th>                <th>ID</th>
+                <th>Toggle</th>                
+                <th>ID</th>
                 <th>product id</th>
                 <th>Brand</th>
                 <th>Model</th>
@@ -412,6 +496,11 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (page === 'searchBrandall') {
             selectedRowIds.length = 0;
             searchBrandallDiv.style.display = 'block'; // Show search input field            
+            return; // Stop execution as we don't need to fetch data for search page
+        }
+        else if (page === 'searchProject') {
+            selectedRowIds.length = 0;
+            searchprojectDiv.style.display = 'block'; // Show search input field            
             return; // Stop execution as we don't need to fetch data for search page
         }
 

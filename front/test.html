@@ -4,341 +4,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Data</title>
-
+    <title>Manage Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            background-color: #f0f0f0;
             margin: 0;
             padding: 0;
         }
 
-        .form-container {
-            width: 80%;
-            max-width: 500px;
-            margin: 50px auto;
-            background-color: #fff;
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        #manageForm {
+            max-width: 400px;
+            margin: 20px auto;
             padding: 20px;
+            background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        h2 {
-            margin-top: 0;
-            color: #333;
-            border-bottom: 2px solid #ccc;
-            padding-bottom: 10px;
-        }
-
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input[type="text"] {
-            width: calc(100% - 12px);
-            padding: 6px;
             margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            color: #555;
         }
 
-        .field-container {
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
             margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
-        #addFieldButton {
-            display: block;
-            margin-top: 20px;
-            padding: 8px 12px;
-            background-color: #4CAF50;
-            color: white;
+        button[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
 
-        #addFieldButton:hover {
+        button[type="submit"]:hover {
             background-color: #45a049;
-        }
-
-        .submit {
-            padding: 8px 12px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .submit:hover {
-            background-color: #45a049;
-        }
-
-        .error-message {
-            color: red;
         }
     </style>
-    
 </head>
 
 <body>
-
-
-    <div class="form-container">
-        <h2>Create New Data</h2>
-        <div id="form">
-            <form id="createForm" onsubmit="submitForm(event)">
-
-                <label for="proid">proid:</label>
-                <input type="text" id="proid" name="proid">
-
-                <label for="serial">Serial:</label>
-                <input type="text" id="serial" name="serial">
-
-                <label for="mac">mac:</label>
-                <input type="text" id="mac" name="mac">
-
-                <label for="brand">Brand:</label>
-                <input type="text" id="brand" name="brand">
-
-                <label for="model">Model:</label>
-                <input type="text" id="model" name="model">
-
-                <label for="price">Price:</label>
-                <input type="text" id="price" name="price">
-
-                <label for="lot_stock">Lot Stock:</label>
-                <input type="text" id="lot_stock" name="lot_stock">
-
-                <label for="project">Project:</label>
-                <input type="text" id="project" name="project">
-
-                <div id="dynamicFields"></div>
-                <button id="addFieldButton" onclick="addField(event)">Add Field</button>
-
-                <input type="submit" value="Submit" class="submit">
-                <span class="error-message" id="error-message"></span>
-
-
-            </form>
-        </div>
-    </div>
+    <h1>Manage Stock</h1>
+    <form id="manageForm">
+        <label for="project">Project:</label>
+        <input type="text" id="project" name="project"><br><br>
+        <label for="out_stock">Out Stock:</label>
+        <input type="text" id="out_stock" name="out_stock"><br><br>
+        <label for="status_stock">Status Stock:</label>
+        <select id="status_stock" name="status_stock">
+            <option value="Sold Out">Sold Out</option>
+            <option value="In Stock">In Stock</option>
+        </select><br><br>
+        <button type="submit">Update</button>
+    </form>
 
 
     <script>
-        const url_api = 'http://192.168.114.134'
+        const url_api = 'http://192.168.114.137'
 
+        // Get selectedRowIds from sessionStorage
+        const selectedRowIds = JSON.parse(sessionStorage.getItem('selectedRowIds'));
 
-        // Global variable to keep track of the number of added fields
-        var fieldCounter = 1;
-        let postData = [];
+        // Use selectedRowIds as needed
+        console.log("Selected Row IDs:", selectedRowIds);
 
-        // Function to add a new input field dynamically
-        function addField(event) {
-            event.preventDefault(); // Prevent the default form submission behavior
+        // เรียกใช้งานฟังก์ชันเมื่อกดปุ่ม "อัปเดต"
+        document.getElementById('manageForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // ป้องกันการรีโหลดหน้า
 
-            // Collect data from the main fields
-            const mainFormData = {
-                proid: document.getElementById('proid').value,
-                serial: document.getElementById('serial').value,
-                mac: document.getElementById('mac').value,
-                brand: document.getElementById('brand').value,
-                model: document.getElementById('model').value,
-                price: document.getElementById('price').value,
-                lot_stock: document.getElementById('lot_stock').value,
-                project: document.getElementById('project').value,
-                status_stock: "in stock"
-            };
-
-            // Push main form data to postData array
-            postData.push(mainFormData);
-
-            // Increment the field counter
-            fieldCounter++;
-
-            // Create a new div element to contain the input fields and label
-            var fieldContainer = document.createElement('div');
-            fieldContainer.className = 'field-container'; // Add a class for styling
-
-            // Create label element for the field counter
-            var label = document.createElement('label');
-            label.textContent = '------ ลำดับที่ ' + fieldCounter + '------------------'; // Display the field counter
-            fieldContainer.appendChild(label);
-
-            // Create line break element
-            fieldContainer.appendChild(document.createElement('br'));
-            fieldContainer.appendChild(document.createElement('br'));
-
-            // Create label element for proid
-            var proidLabel = document.createElement('label');
-            proidLabel.textContent = 'proid:';
-            fieldContainer.appendChild(proidLabel);
-            // Create input elements for proid
-            var proidInput = createInput('proid_' + fieldCounter, 'text', 'proid');
-            proidInput.value = mainFormData.proid; // Set the value to match the main proid value
-            fieldContainer.appendChild(proidInput);
-
-            // Create line break element
-            fieldContainer.appendChild(document.createElement('br'));
-
-            var brandLabel = document.createElement('label');
-            brandLabel.textContent = 'Brand:';
-            fieldContainer.appendChild(brandLabel);
-            var brandInput = createInput('brand_' + fieldCounter, 'text', 'Brand');
-            brandInput.value = mainFormData.brand
-            fieldContainer.appendChild(brandInput);
-
-            // Create line break element
-            fieldContainer.appendChild(document.createElement('br'));
-
-            var modelLabel = document.createElement('label');
-            modelLabel.textContent = 'Model:';
-            fieldContainer.appendChild(modelLabel);
-            var modelInput = createInput('model_' + fieldCounter, 'text', 'Model');
-            modelInput.value = mainFormData.model
-            fieldContainer.appendChild(modelInput);
-
-            // Create line break element
-            fieldContainer.appendChild(document.createElement('br'));
-
-            var priceLabel = document.createElement('label');
-            priceLabel.textContent = 'Price:';
-            fieldContainer.appendChild(priceLabel);
-            var priceInput = createInput('price_' + fieldCounter, 'text', 'Price');
-            priceInput.value = mainFormData.price
-            fieldContainer.appendChild(priceInput);
-
-            // Create line break element
-            fieldContainer.appendChild(document.createElement('br'));
-
-            var lotStockLabel = document.createElement('label');
-            lotStockLabel.textContent = 'Lot Stock:';
-            fieldContainer.appendChild(lotStockLabel);
-            var lotStockInput = createInput('lot_stock_' + fieldCounter, 'text', 'Lot Stock');
-            lotStockInput.value = mainFormData.lot_stock
-            fieldContainer.appendChild(lotStockInput);
-
-            // Create line break element
-            fieldContainer.appendChild(document.createElement('br'));
-
-            var projectLabel = document.createElement('label');
-            projectLabel.textContent = 'Project:';
-            fieldContainer.appendChild(projectLabel);
-            var projectInput = createInput('project_' + fieldCounter, 'text', 'Project');
-            projectInput.value = mainFormData.project
-            fieldContainer.appendChild(projectInput);
-
-            // Create line break element
-            fieldContainer.appendChild(document.createElement('br'));
-
-            // Create input elements for serial and mac
-            var serialLabel = document.createElement('label');
-            serialLabel.textContent = 'Serial:';
-            fieldContainer.appendChild(serialLabel);
-            var serialInput = createInput('serial_' + fieldCounter, 'text', 'Serial');
-            fieldContainer.appendChild(serialInput);
-
-            // Create line break element
-            fieldContainer.appendChild(document.createElement('br'));
-
-            var macLabel = document.createElement('label');
-            macLabel.textContent = 'Mac:';
-            fieldContainer.appendChild(macLabel);
-            var macInput = createInput('mac_' + fieldCounter, 'text', 'Mac');
-            fieldContainer.appendChild(macInput);
-
-            fieldContainer.appendChild(document.createElement('br'));
-
-            // Add the field container to the form with id="form"
-            var addButton = document.getElementById('addFieldButton'); // รับอ้างอิงปุ่ม "Add Field"
-            addButton.insertAdjacentElement('beforebegin', fieldContainer); // แทรกฟิลด์ใหม่ก่อนปุ่ม "Add Field"
-            
-        }
-
-
-
-        // Function to create an input element
-        function createInput(id, type, placeholder) {
-            var input = document.createElement('input');
-            input.type = type;
-            input.id = id;
-            input.name = id;
-            input.placeholder = placeholder;
-            return input;
-        }
-
-        // ตรวจสอบและป้องกันการ submit ฟอร์มเมื่อกด Enter
-        document.getElementById('createForm').addEventListener('keydown', function (event) {
-            if (event.key === "Enter") {
-                event.preventDefault(); // ป้องกันการ submit ของฟอร์ม
-            }
+            updateDataInDatabase();
         });
 
-        // Function to collect form data and send it to the API
-        function submitForm(event) {
-            event.preventDefault();
 
-            // Collect data from the main fields
-            const mainFormData = {
-                proid: document.getElementById('proid').value,
-                serial: document.getElementById('serial').value,
-                mac: document.getElementById('mac').value,
-                brand: document.getElementById('brand').value,
-                model: document.getElementById('model').value,
-                price: document.getElementById('price').value,
-                lot_stock: document.getElementById('lot_stock').value,
-                project: document.getElementById('project').value,
-                status_stock: "in stock"
-            };
+        function updateDataInDatabase() {
+            const selectedRowIds = JSON.parse(sessionStorage.getItem('selectedRowIds'));
 
-            // Push main form data to postData array
-            const postData = [mainFormData];
+            // ดึงค่าจากฟอร์ม
+            const project = document.getElementById('project').value;
+            const out_stock = document.getElementById('out_stock').value;
+            const status_stock = document.getElementById('status_stock').value;
 
-            // Collect data from dynamically added fields
-            const dynamicFields = document.querySelectorAll('.field-container');
+            // สร้างตัวแปร formDataArray เพื่อเก็บข้อมูลที่จะส่งไปยัง API
+            const formDataArray = [];
 
-            dynamicFields.forEach(fieldContainer => {
-                const dynamicFormData = {
-                    proid: fieldContainer.querySelector('input[name^="proid"]').value,
-                    mac: fieldContainer.querySelector('input[name^="mac"]').value,
-                    brand: fieldContainer.querySelector('input[name^="brand"]').value,
-                    model: fieldContainer.querySelector('input[name^="model"]').value,
-                    price: fieldContainer.querySelector('input[name^="price"]').value,
-                    serial: fieldContainer.querySelector('input[name^="serial"]').value,
-                    project: fieldContainer.querySelector('input[name^="project"]').value,
-                    lot_stock: fieldContainer.querySelector('input[name^="lot_stock"]').value,
-                    status_stock: "in stock"
+            // วนลูปผ่าน ID ที่เลือก
+            selectedRowIds.forEach(id => {
+                // เตรียมข้อมูลที่จะส่งไปยัง API สำหรับแต่ละ ID
+                const formData = {
+                    id: id,
+                    project: project,
+                    out_stock: out_stock,
+                    status_stock: status_stock
                 };
-                postData.push(dynamicFormData);
+
+                // เพิ่ม formData ลงใน formDataArray
+                formDataArray.push(formData);
             });
 
-            console.log(postData)
-
-            // Send POST request to the API
-            fetch(`${url_api}:5000/datadynamic`, {
-                method: 'POST',
+            // ส่งข้อมูลไปยัง API สำหรับการอัปเดต
+            fetch(`${url_api}:5000/managestock`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(postData) // Send data in JSON format to the server
+                body: JSON.stringify(formDataArray) // ส่ง formDataArray แทน formData
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('New data created:', data);
-                    alert('New data created successfully!');
-                    window.location.href = `${url_api}:3000`; // Redirect to the specified URL
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Data updated successfully');
+                        alert('New data created successfully!');
+                        window.location.href = `${url_api}:3000`; // Redirect หน้าไปที่ URL ที่กำหนด
+
+                    } else {
+                        console.error('Failed to update data');
+                    }
                 })
                 .catch(error => {
-                    console.error('Error creating new data:', error);
-                    document.getElementById('error-message').innerText = 'Failed to create new data. Please try again.';
-                    // window.location.href = `${url_api}:3000`; // Redirect to the specified URL
+                    console.error('Error updating data:', error);
                 });
         }
+
+
 
     </script>
 </body>

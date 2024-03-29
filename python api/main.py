@@ -92,6 +92,23 @@ def get_countmodelall_data_by_brand(brand):
     cursor.close()
     return jsonify(countmodel_records)
 
+# Read (อ่านข้อมูลจาก project)
+@app.route('/searchproject/<project>', methods=['GET'])
+def get_search_data_by_project(project):
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT 
+            *
+        FROM 
+            equipment 
+        WHERE
+            project = %s
+        
+    """, (project,))
+    search_records = cursor.fetchall()
+    cursor.close()
+    return jsonify(search_records)
+
 # Read (อ่านข้อมูลจาก brand)
 @app.route('/countmodel/<brand>', methods=['GET'])
 def get_countmodel_data_by_brand(brand):
