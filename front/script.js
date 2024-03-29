@@ -50,7 +50,7 @@ function deleteData(id) {
 }
 
 // หาอุปกรณ์ทั้งหมดของ project
-function searchByProject(){
+function searchByProject() {
     const projectInput = document.getElementById('projectInput').value.trim();
     console.log(projectInput)
     if (projectInput !== '') {
@@ -101,7 +101,7 @@ function searchByProject(){
                     `;
                     tableBody.appendChild(row);
                 });
-            
+
                 // Add event listener for the "Delete" button in searchByBrandall function
                 tableBody.addEventListener('click', function (event) {
                     if (event.target.classList.contains('deleteBtnIN')) {
@@ -172,7 +172,7 @@ const selectedRowIds = [];
 function toggleCheckbox(event) {
     const button = event.target; // Get the clicked button
     const row = button.closest('tr'); // Find the closest table row to the clicked button
-    console.log("console",row)
+    console.log("console", row)
 
     if (row) {
         const id = row.querySelector('td:nth-child(2)').textContent; // Get the ID from the second column of the row
@@ -252,7 +252,7 @@ function searchByBrandall() {
                     tableBody.appendChild(row);
                 });
 
-                
+
 
                 // Add event listener for the "Delete" button in searchByBrandall function
                 tableBody.addEventListener('click', function (event) {
@@ -477,16 +477,35 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
         } else if (page === 'searchBrand') {
             selectedRowIds.length = 0;
+
+            document.getElementById('searchBrandall').style.display = 'none'; // Hide search input field
+            document.getElementById('searchProject').style.display = 'none'; // Hide search input field
+
             searchBrandDiv.style.display = 'block'; // Show search input field            
             return; // Stop execution as we don't need to fetch data for search page
         } else if (page === 'searchBrandall') {
             selectedRowIds.length = 0;
+
+            document.getElementById('searchBrand').style.display = 'none'; // Hide search input field
+            document.getElementById('searchProject').style.display = 'none'; // Hide search input field
+
             searchBrandallDiv.style.display = 'block'; // Show search input field            
             return; // Stop execution as we don't need to fetch data for search page
         }
         else if (page === 'searchProject') {
             selectedRowIds.length = 0;
+
+            document.getElementById('searchBrand').style.display = 'none'; // Hide search input field
+            document.getElementById('searchBrandall').style.display = 'none'; // Hide search input field
+
             searchprojectDiv.style.display = 'block'; // Show search input field            
+            return; // Stop execution as we don't need to fetch data for search page
+        }
+        else if (page === '') {
+            selectedRowIds.length = 0;
+            document.getElementById('searchBrand').style.display = 'none'; // Hide search input field
+            document.getElementById('searchBrandall').style.display = 'none'; // Hide search input field
+            document.getElementById('searchProject').style.display = 'none'; // Hide search input field
             return; // Stop execution as we don't need to fetch data for search page
         }
 
