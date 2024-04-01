@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
 
 function App() {
   const [data, setData] = useState([]);
@@ -10,12 +10,15 @@ function App() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://192.168.114.134:5000/data');
-      console.log("res",response)
+      const globalVariablesRes = await fetch("globalVariables.json");
+      const globalVariables = await globalVariablesRes.json();
+      const ip = globalVariables.ip;
+      const response = await fetch(`${ip}:5000/data`);
+      console.log("res", response);
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     }
   };
 

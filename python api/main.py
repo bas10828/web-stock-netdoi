@@ -9,6 +9,9 @@ with open('../front/globalVariables.json') as json_file:
 url_api = data['ip']
 # url_api = "http://192.168.114.136"
 
+url_api = data['ip']
+# url_api = "http://192.168.114.136"
+ 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 # เชื่อมต่อกับ MySQL Server
