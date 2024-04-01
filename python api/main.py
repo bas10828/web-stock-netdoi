@@ -1,8 +1,13 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import mysql.connector
+import json
 
-url_api = "http://192.168.114.136"
+with open('../front/globalVariables.json') as json_file:
+    data = json.load(json_file)
+
+url_api = data['ip']
+# url_api = "http://192.168.114.136"
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -91,6 +96,23 @@ def get_countmodelall_data_by_brand(brand):
     countmodel_records = cursor.fetchall()
     cursor.close()
     return jsonify(countmodel_records)
+
+# Read (อ่านข้อมูลจาก libraly จาก proid)
+@app.route('/createbyproid/<proid>', methods=['GET'])
+def get_create_by_proid(proid):
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT 
+            *
+        FROM 
+            ribraly 
+        WHERE
+            proid = %s
+        
+    """, (proid,))
+    createbyproid_records = cursor.fetchall()
+    cursor.close()
+    return jsonify(createbyproid_records)
 
 # Read (อ่านข้อมูลจาก project)
 @app.route('/searchproject/<project>', methods=['GET'])

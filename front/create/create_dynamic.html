@@ -4,8 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
     <title>Create New Data</title>
     <style>
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Karma", sans-serif
+        }
+
+        .w3-bar-block .w3-bar-item {
+            padding: 20px
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
@@ -51,8 +67,10 @@
         #addFieldButton {
             display: block;
             margin-top: 20px;
-            padding: 8px 12px;
-            background-color: #4CAF50;
+            padding: 10px 16px;
+            /* Increase padding for a larger button */
+            background-color: #ffd700;
+            /* Change to yellow color */
             color: white;
             border: none;
             border-radius: 4px;
@@ -61,11 +79,15 @@
         }
 
         #addFieldButton:hover {
-            background-color: #45a049;
+            background-color: #ffcc00;
+            /* Darken the yellow color on hover */
         }
 
         .submit {
-            padding: 8px 12px;
+            padding: 12px 20px;
+            /* Increase padding for a larger button */
+            font-size: 18px;
+            /* Increase font size for a larger button */
             background-color: #4CAF50;
             color: white;
             border: none;
@@ -85,6 +107,29 @@
 </head>
 
 <body>
+
+    <!-- Sidebar (hidden by default) -->
+    <nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left"
+        style="display:none;z-index:2;width:40%;min-width:300px" id="mySidebar">
+        <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button">Close Menu</a>
+        <!-- <a href="#food" onclick="w3_close()" class="w3-bar-item w3-button">Food</a>
+     <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button">About</a> -->
+
+        <!-- Input field for search -->
+        <div id="searchBrand">
+            <input type="text" id="proidInput" placeholder="Enter Product ID">
+            <button onclick="searchproductid()">Search</button>
+            <!-- <button onclick="closesearch()">close</button> -->
+        </div>
+
+    </nav>
+
+    <!-- Top menu -->
+    <div class="w3-top">
+        <div class="w3-white w3-xlarge" style="max-width:1200px;margin:auto">
+            <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()">☰</div>
+        </div>
+    </div>
     <h2>Create New Data</h2>
 
     <div class="form-container">
@@ -122,6 +167,7 @@
                 <button id="addFieldButton" onclick="addField(event)">Add Field</button>
 
                 <br>
+
                 <input type="submit" value="Submit" class="submit">
                 <span class="error-message" id="error-message"></span>
 
@@ -132,7 +178,43 @@
 
 
     <script>
-        const url_api = 'http://192.168.114.136'
+        const url_api = window.apiUrl
+        // const url_api = 'http://192.168.114.136'
+
+         // Script to open and close sidebar
+         function w3_open() {
+            document.getElementById("mySidebar").style.display = "block";
+        }
+
+        function w3_close() {
+            document.getElementById("mySidebar").style.display = "none";
+        }
+
+        function searchproductid() {
+            const proidInput = document.getElementById('proidInput').value.trim();
+            console.log(proidInput)
+            // Fetch data from API and populate form fields
+            if (proidInput !== '') {
+                fetch(`${url_api}:5000/createbyproid/${proidInput}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const brandInput = document.getElementById('brand');
+                        const modelInput = document.getElementById('model');
+                        const proid = document.getElementById('proid');
+
+                        // Set input values from API data
+                        brandInput.value = data[0].brand;
+                        modelInput.value = data[0].model;
+                        proid.value = data[0].proid;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        document.getElementById('error-message').innerText = 'Failed to fetch data from API.';
+                    });
+            }
+
+            w3_close()
+        }
 
 
         // Global variable to keep track of the number of added fields
@@ -266,10 +348,21 @@
 
             fieldContainer.appendChild(document.createElement('br'));
 
+            // Create remove button
+            var removeButton = document.createElement('button');
+            removeButton.textContent = 'Remove'; // Set button text
+            removeButton.className = 'remove-field'; // Add class for styling
+            removeButton.addEventListener('click', function () {
+                removeField(fieldContainer); // Call the removeField function to remove the field container
+            });
+            fieldContainer.appendChild(removeButton);
+
             // Add the field container to the form with id="form"
             var addButton = document.getElementById('addFieldButton'); // รับอ้างอิงปุ่ม "Add Field"
             addButton.insertAdjacentElement('beforebegin', fieldContainer); // แทรกฟิลด์ใหม่ก่อนปุ่ม "Add Field"
         }
+
+
 
 
 
@@ -289,6 +382,24 @@
                 event.preventDefault(); // ป้องกันการ submit ของฟอร์ม
             }
         });
+
+        // Add an event listener to dynamically added fields to handle removal
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('remove-field')) {
+                const fieldContainer = event.target.parentNode; // Get the field container
+                removeField(fieldContainer); // Call the removeField function to remove it
+            }
+        });
+
+        // Function to remove a dynamically added field
+        function removeField(fieldContainer) {
+            if (fieldContainer && fieldContainer.parentNode) { // Check if fieldContainer and its parent node exist
+                fieldContainer.parentNode.removeChild(fieldContainer); // Remove the field container from the DOM
+            }
+        }
+
+
+
 
         // Function to collect form data and send it to the API
         function submitForm(event) {

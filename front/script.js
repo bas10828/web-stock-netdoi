@@ -1,4 +1,6 @@
-const url_api = 'http://192.168.114.136'
+console.log("API URL:", window.apiUrl);
+// const url_api = 'http://192.168.114.136'
+const url_api = window.apiUrl
 
 // Script to open and close sidebar
 function w3_open() {
@@ -15,7 +17,6 @@ function closesearch() {
     document.getElementById('searchBrand').style.display = 'none'; // Hide search input field
     document.getElementById('searchBrandall').style.display = 'none'; // Hide search input field
     document.getElementById('searchProject').style.display = 'none'; // Hide search input field
-
 }
 
 // Function to delete data

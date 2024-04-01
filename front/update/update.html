@@ -116,7 +116,8 @@
         </form>
     </div>
     <script>
-        const url_api = 'http://192.168.114.136'
+        const url_api = window.apiUrl
+        // const url_api = 'http://192.168.114.136'
         document.addEventListener("DOMContentLoaded", function () {
             // Get stored rowData from sessionStorage
             const rowData = JSON.parse(sessionStorage.getItem('rowData'));

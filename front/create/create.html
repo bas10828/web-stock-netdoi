@@ -4,8 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
     <title>Create New Data</title>
     <style>
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Karma", sans-serif
+        }
+
+        .w3-bar-block .w3-bar-item {
+            padding: 20px
+        }
+
         /* CSS styles */
         body {
             font-family: 'Open Sans', sans-serif;
@@ -78,6 +94,28 @@
 </head>
 
 <body>
+    <!-- Sidebar (hidden by default) -->
+    <nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left"
+        style="display:none;z-index:2;width:40%;min-width:300px" id="mySidebar">
+        <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button">Close Menu</a>
+        <!-- <a href="#food" onclick="w3_close()" class="w3-bar-item w3-button">Food</a>
+        <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button">About</a> -->
+
+        <!-- Input field for search -->
+        <div id="searchBrand">
+            <input type="text" id="proidInput" placeholder="Enter Product ID">
+            <button onclick="searchproductid()">Search</button>
+            <!-- <button onclick="closesearch()">close</button> -->
+        </div>
+
+    </nav>
+
+    <!-- Top menu -->
+    <div class="w3-top">
+        <div class="w3-white w3-xlarge" style="max-width:1200px;margin:auto">
+            <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()">☰</div>
+        </div>
+    </div>
     <h2>Create New Data</h2>
     <section id="contact">
         <div class="content">
@@ -111,7 +149,7 @@
                     <label for="project">Project:</label>
                     <input type="text" id="project" name="project">
 
-                    <label for="repeat">repeat:</label>
+                    <label for="repeat">จำนวนรายการที่ต้องการเพิ่ม:</label>
                     <input type="text" id="repeat" name="repeat" value="1">
 
                     <input type="submit" value="Submit" class="submit">
@@ -119,10 +157,50 @@
                 </form>
             </div>
         </div>
+
+
     </section>
 
+
+
     <script>
-        const url_api = 'http://192.168.114.136'
+        // const url_api = 'http://192.168.114.136'
+        const url_api = window.apiUrl
+        // Script to open and close sidebar
+        function w3_open() {
+            document.getElementById("mySidebar").style.display = "block";
+        }
+
+        function w3_close() {
+            document.getElementById("mySidebar").style.display = "none";
+        }
+
+        function searchproductid() {
+            const proidInput = document.getElementById('proidInput').value.trim();
+            console.log(proidInput)
+            // Fetch data from API and populate form fields
+            if (proidInput !== '') {
+                fetch(`${url_api}:5000/createbyproid/${proidInput}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const brandInput = document.getElementById('brand');
+                        const modelInput = document.getElementById('model');
+                        const proid = document.getElementById('proid');
+
+                        // Set input values from API data
+                        brandInput.value = data[0].brand;
+                        modelInput.value = data[0].model;
+                        proid.value = data[0].proid;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        document.getElementById('error-message').innerText = 'Failed to fetch data from API.';
+                    });
+            }
+
+            w3_close()
+        }
+
         // ตรวจสอบและป้องกันการ submit ฟอร์มเมื่อกด Enter
         document.getElementById('createForm').addEventListener('keydown', function (event) {
             if (event.key === "Enter") {

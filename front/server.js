@@ -39,6 +39,17 @@ app.get('/update/update.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'update', 'update.html'));
 });
 
+// // Serve globalVariables.json
+// app.get('/globalVariables.json', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'globalVariables.json'));
+// });
+
+// // Serve .env
+// app.get('/.env', (req, res) => {
+//     res.sendFile(path.join(__dirname, '.env'));
+// });
+
+
 
 
 // Start the server
