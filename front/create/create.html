@@ -117,6 +117,7 @@
         </div>
     </div>
     <h2>Create New Data</h2>
+    <br>
     <section id="contact">
         <div class="content">
             <div id="form">
@@ -140,11 +141,22 @@
                     <label for="price">Price:</label>
                     <input type="text" id="price" name="price">
 
-                    <label for="lot_stock">In Stock:</label>
-                    <input type="text" id="into_stock" name="into_stock">
+                    <!-- <label for="into_stock">In Stock:</label>
+                    <input type="text" id="into_stock" name="into_stock"> -->
 
-                    <label for="out_stock">Sale Date:</label>
-                    <input type="text" id="out_stock" name="out_stock">
+                    <div class="col">
+                        <label for="into_stock">In Stock:</label>
+                        <input type="date" onload="getDate()" class="form-control" id="into_stock" name="into_stock">
+                    </div>
+                    <br>
+                    <!-- <label for="out_stock">Sale Date:</label>
+                    <input type="text" id="out_stock" name="out_stock"> -->
+
+                    <div class="col">
+                        <label for="out_stock">Sale Date:</label>
+                        <input type="date" onload="getDate()" class="form-control" id="out_stock" name="out_stock">
+                    </div>
+                    <br>
 
                     <label for="project">Project:</label>
                     <input type="text" id="project" name="project">
@@ -161,12 +173,19 @@
 
     </section>
 
-
-
     <script>
-        // const url_api = 'http://192.168.114.136'
-        const url_api = window.apiUrl
+        const url_api = 'http://192.168.114.136'
+       
+        // const url_api = window.apiUrl
+        // console.log(url_api)
         // Script to open and close sidebar
+
+        function getDate() {
+            var today = new Date();
+            document.getElementById("date").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+        }
+
+
         function w3_open() {
             document.getElementById("mySidebar").style.display = "block";
         }

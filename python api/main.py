@@ -1,16 +1,13 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import mysql.connector
-import json
+# import json
 
-with open('../front/globalVariables.json') as json_file:
-    data = json.load(json_file)
+# with open('globalVariables.json') as json_file:
+#     data = json.load(json_file)
 
-url_api = data['ip']
-# url_api = "http://192.168.114.136"
-
-url_api = data['ip']
-# url_api = "http://192.168.114.136"
+# url_api = data['ip']
+url_api = "http://192.168.114.136"
  
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -100,7 +97,7 @@ def get_countmodelall_data_by_brand(brand):
     cursor.close()
     return jsonify(countmodel_records)
 
-# Read (อ่านข้อมูลจาก libraly จาก proid)
+# Read (อ่านข้อมูลจาก table libraly จาก proid)
 @app.route('/createbyproid/<proid>', methods=['GET'])
 def get_create_by_proid(proid):
     cursor = connection.cursor(dictionary=True)
@@ -130,6 +127,57 @@ def get_search_data_by_project(project):
             project = %s
         
     """, (project,))
+    search_records = cursor.fetchall()
+    cursor.close()
+    return jsonify(search_records)
+
+# Read (อ่านข้อมูลจาก serail)
+@app.route('/searchserial/<serial>', methods=['GET'])
+def get_search_data_by_serial(serial):
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT 
+            *
+        FROM 
+            equipment 
+        WHERE
+            serial = %s
+        
+    """, (serial,))
+    search_records = cursor.fetchall()
+    cursor.close()
+    return jsonify(search_records)
+
+# Read (อ่านข้อมูลจาก proid)
+@app.route('/searchproid/<proid>', methods=['GET'])
+def get_search_data_by_proid(proid):
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT 
+            *
+        FROM 
+            equipment 
+        WHERE
+            proid = %s
+        
+    """, (proid,))
+    search_records = cursor.fetchall()
+    cursor.close()
+    return jsonify(search_records)
+
+# Read (อ่านข้อมูลจาก proid แบบ limit)
+@app.route('/searchproid/<proid>/<int:limit>', methods=['GET'])
+def get_search_data_by_proid_limit(proid,limit):
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT 
+            *
+        FROM 
+            equipment 
+        WHERE
+            proid = %s
+        LIMIT %s
+    """, (proid,limit))
     search_records = cursor.fetchall()
     cursor.close()
     return jsonify(search_records)

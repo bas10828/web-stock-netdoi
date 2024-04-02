@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
     <title>Manage Page</title>
     <style>
         body {
@@ -54,16 +56,75 @@
         button[type="submit"]:hover {
             background-color: #45a049;
         }
+
+        /* สไตล์สำหรับตาราง */
+        #dataTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #dataTable th,
+        #dataTable td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #dataTable th {
+            background-color: #f2f2f2;
+            color: #333333;
+        }
+
+        /* สไตล์สำหรับแถวที่เป็นเลขคู่ */
+        #dataTable tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* สไตล์เมื่อเม้าส์ hover ที่แถว */
+        #dataTable tbody tr:hover {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- Sidebar (hidden by default) -->
+    <nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left"
+        style="display:none;z-index:2;width:40%;min-width:300px" id="mySidebar">
+        <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button">Close Menu</a>
+        <!-- <a href="#food" onclick="w3_close()" class="w3-bar-item w3-button">Food</a>
+     <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button">About</a> -->
+
+        <!-- Input field for search -->
+        <div id="searchBrand">
+            <input type="text" id="proidInput" placeholder="Enter Product ID">
+            <input type="text" id="limitInput" placeholder="LIMIT">
+            <button onclick="searchproductid()">Search</button>
+            <!-- <button onclick="closesearch()">close</button> -->
+        </div>
+
+    </nav>
+
+    <!-- Top menu -->
+    <div class="w3-top">
+        <div class="w3-white w3-xlarge" style="max-width:1200px;margin:auto">
+            <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()">☰</div>
+        </div>
+    </div>
     <h1>Manage Stock</h1>
     <form id="manageForm">
         <label for="project">Project:</label>
-        <input type="text" id="project" name="project"><br><br>
-        <label for="out_stock">Out Stock:</label>
-        <input type="text" id="out_stock" name="out_stock"><br><br>
+        <input type="text" id="project" name="project"><br>
+
+        <!-- <label for="out_stock">Out Stock:</label>
+        <input type="text" id="out_stock" name="out_stock"><br><br> -->
+
+        <div class="col">
+            <label for="out_stock">Sale Date:</label>
+            <input type="date" onload="getDate()" class="form-control" id="out_stock" name="out_stock">
+        </div><br>
+
         <label for="status_stock">Status Stock:</label>
         <select id="status_stock" name="status_stock">
             <option value="Sold Out">Sold Out</option>
@@ -71,17 +132,127 @@
         </select><br><br>
         <button type="submit">Update</button>
     </form>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Product ID</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Serial</th>
+                <th>MAC</th>
+                <th>Project</th>
+                <th>price</th>
+                <th>Status</th>
+                <th>into_stock</th>
+                <th>out_stock</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- ใส่ข้อมูลตารางที่นี่ -->
+        </tbody>
+    </table>
 
 
     <script>
-        // const url_api = 'http://192.168.114.136'
+        const url_api = 'http://192.168.114.136'
 
-        const url_api = window.apiUrl
+        function getDate() {
+            var today = new Date();
+            document.getElementById("date").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+        }
+        // Script to open and close sidebar
+        function w3_open() {
+            document.getElementById("mySidebar").style.display = "block";
+        }
+
+        function w3_close() {
+            document.getElementById("mySidebar").style.display = "none";
+        }
         // Get selectedRowIds from sessionStorage
         const selectedRowIds = JSON.parse(sessionStorage.getItem('selectedRowIds'));
-
         // Use selectedRowIds as needed
-        console.log("Selected Row IDs:", selectedRowIds);
+        // console.log("Selected Row IDs:", selectedRowIds);
+
+        function searchproductid() {
+            const proidInput = document.getElementById('proidInput').value.trim();
+            const limitInput = document.getElementById('limitInput').value.trim();
+            // console.log({proidInput,limitInput})
+            // Fetch data from API and populate form fields
+            if (proidInput !== '') {
+                fetch(`${url_api}:5000/searchproid/${proidInput}/${limitInput}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // console.log(data)
+                        // เก็บ id ของแต่ละแถวลงใน sessionStorage
+                        const selectedRowIds = [];
+                        data.forEach(row => {
+                            selectedRowIds.push(row.id);
+                        });
+                        sessionStorage.setItem('selectedRowIds', JSON.stringify(selectedRowIds));
+                        console.log("Selected Row IDs:", selectedRowIds);
+
+
+                        // สามารถเรียกใช้ id ที่เก็บไว้ใน sessionStorage ได้ตามต้องการ
+                        // console.log('Selected Row IDs:', selectedRowIds);
+                        // แสดงข้อมูลในตาราง
+                        const tableBody = document.getElementById('tableBody');
+                        tableBody.innerHTML = ''; // เคลียร์ข้อมูลที่มีอยู่ในตารางก่อนแสดงข้อมูลใหม่
+
+                        data.forEach(row => {
+                            const newRow = document.createElement('tr');
+                            newRow.setAttribute('data-row-id', row.id);
+                            newRow.innerHTML = `
+                        <td>${row.id}</td>
+                        <td>${row.proid}</td>
+                        <td>${row.brand}</td>
+                        <td>${row.model}</td>
+                        <td>${row.serial}</td>
+                        <td>${row.mac}</td>
+                        <td>${row.project}</td>
+                        <td>${row.price}</td>
+                        <td>${row.status_stock}</td>
+                        <td>${row.into_stock}</td>
+                        <td>${row.out_stock}</td>
+                    `;
+                            tableBody.appendChild(newRow);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        document.getElementById('error-message').innerText = 'Failed to fetch data from API.';
+                    });
+            }
+
+            w3_close();
+
+
+            // เพิ่มโค้ดตรงนี้เพื่อจัดการการคลิกที่แถวของตารางและเก็บ id ของแถวนั้นไว้ใน sessionStorage
+            // เรียกใช้งาน handleRowClick โดยส่ง id ของแถวที่คลิกเข้าไปเป็นพารามิเตอร์
+            document.querySelectorAll('tr').forEach(row => {
+                row.addEventListener('click', () => {
+                    const rowId = row.getAttribute('data-row-id');
+                    handleRowClick(rowId);
+                });
+            });
+        }
+
+        // เมื่อมีการคลิกที่แถวในตารางหรือเลือกแถวใด ๆ
+        function handleRowClick(rowId) {
+            storeSelectedRowId(rowId); // เรียกใช้ฟังก์ชันเพื่อเก็บ id ของแถวนั้น
+            // ทำสิ่งที่คุณต้องการทำหลังจากเลือกแถว เช่น เปิดฟอร์มหรือปรับปรุงข้อมูล
+        }
+
+        // เมื่อมีการคลิกที่แถวในตารางหรือเลือกแถวใด ๆ ให้เก็บ id ของแถวนั้นไว้
+        function storeSelectedRowId(rowId) {
+            let selectedRowIds = JSON.parse(sessionStorage.getItem('selectedRowIds')) || []; // รับอาร์เรย์ของ id จาก sessionStorage หรือสร้างอาร์เรย์ใหม่ถ้าไม่มีอยู่แล้ว
+            if (!selectedRowIds.includes(rowId)) { // ตรวจสอบว่า id นี้ยังไม่ได้ถูกเพิ่มลงในอาร์เรย์หรือไม่
+                selectedRowIds.push(rowId); // เพิ่ม id ลงในอาร์เรย์
+            }
+            sessionStorage.setItem('selectedRowIds', JSON.stringify(selectedRowIds)); // บันทึกอาร์เรย์ของ id ลงใน sessionStorage
+        }
+
+
 
         // เรียกใช้งานฟังก์ชันเมื่อกดปุ่ม "อัปเดต"
         document.getElementById('manageForm').addEventListener('submit', function (event) {

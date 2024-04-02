@@ -94,6 +94,8 @@
             <option value="searchBrand">หาจำนวนของแบรน</option>
             <option value="searchBrandall">หาแบรน</option>
             <option value="searchProject">Project</option>
+            <option value="searchSerial">Serial</option>
+            <option value="searchProid">Product ID</option>
         </select>
         <!-- Input field for search -->
         <div id="searchBrand" style="display: none;">
@@ -107,8 +109,18 @@
             <button onclick="closesearch()">close</button>
         </div>
         <div id="searchProject" style="display: none;">
-            <input type="text" id="projectInput" placeholder="Enter project ame">
+            <input type="text" id="projectInput" placeholder="Enter project name">
             <button onclick="searchByProject()">Search</button>
+            <button onclick="closesearch()">close</button>
+        </div>
+        <div id="searchSerial" style="display: none;">
+            <input type="text" id="serialInput" placeholder="Enter Serial Number">
+            <button onclick="searchBySerial()">Search</button>
+            <button onclick="closesearch()">close</button>
+        </div>
+        <div id="searchProid" style="display: none;">
+            <input type="text" id="proidInput" placeholder="Enter Product ID">
+            <button onclick="searchByProid()">Search</button>
             <button onclick="closesearch()">close</button>
         </div>
     </nav>
@@ -128,9 +140,7 @@
         id="myOverlay"></div>
 
     <!-- End page content -->
-    <script>
-        window.apiUrl = 'http://192.168.114.136'; // ตัวอย่างการกำหนด apiUrl ใน HTML
-    </script>
+
     <script src="script.js"></script>
 
 

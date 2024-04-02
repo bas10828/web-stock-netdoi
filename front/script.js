@@ -1,7 +1,7 @@
 
-console.log("API URL:", window.apiUrl);
-// const url_api = 'http://192.168.114.136'
-const url_api = window.apiUrl
+// console.log("API URL:", window.apiUrl);
+const url_api = 'http://192.168.114.136'
+// const url_api = window.apiUrl
 
 
 // Script to open and close sidebar
@@ -238,8 +238,7 @@ function searchByBrandall() {
         data.forEach((item) => {
           const row = document.createElement("tr");
           row.innerHTML = `
-                        <td><button class="toggleBtn" data-row-id="${item.id
-            }"></button></td>
+                        <td><button class="toggleBtn" data-row-id="${item.id}"></button></td>
                         <td>${item.id}</td>
                         <td>${item.proid}</td>
                         <td>${item.brand}</td>
@@ -251,8 +250,145 @@ function searchByBrandall() {
                         <td>${item.into_stock}</td>
                         <td>${item.out_stock}</td>
                         <td>${item.status_stock}</td>
-                        <td><button class="deleteBtnIN" data-id-IN="${item.id
-            }">Delete</button></td>
+                        <td><button class="deleteBtnIN" data-id-IN="${item.id}">Delete</button></td>
+                        <td><button class="updateBtn">Edit</button></td>
+                    `;
+          tableBody.appendChild(row);
+        });
+
+        // Add event listener for the "Delete" button in searchByBrandall function
+        tableBody.addEventListener("click", function (event) {
+          if (event.target.classList.contains("deleteBtnIN")) {
+            const id = event.target.getAttribute("data-id-IN"); // Get the id from data-id attribute
+            deleteData(id);
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        alert("Failed to fetch data. Please try again.");
+      });
+  } else {
+    alert("Please enter a brand name");
+  }
+}
+
+//หา serial ทั้งหมดตามข้อมูลที่ป้อน
+function searchBySerial() {
+  const serialInput = document.getElementById("serialInput").value.trim();
+  if (serialInput !== "") {
+    fetch(`${url_api}:5000/searchserial/${serialInput}`)
+      .then((response) => response.json())
+      .then((data) => {
+        // Clear the table
+        const tableBody = document.getElementById("tableBody");
+        tableBody.innerHTML = "";
+
+        // Set table header
+        const tableHead = document.querySelector("thead tr");
+        tableHead.innerHTML = `
+                    <th>Toggle</th>
+                    <th>ID</th>
+                    <th>product id</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Price</th>
+                    <th>Serial</th>
+                    <th>mac</th>
+                    <th>Project</th>
+                    <th>In Stock</th>
+                    <th>Sale Out</th>
+                    <th>Status Stock</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                `;
+
+        // Loop through each item in the data array and create a table row for it
+        data.forEach((item) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                        <td><button class="toggleBtn" data-row-id="${item.id}"></button></td>
+                        <td>${item.id}</td>
+                        <td>${item.proid}</td>
+                        <td>${item.brand}</td>
+                        <td>${item.model}</td>
+                        <td>${item.price}</td>
+                        <td>${item.serial}</td>
+                        <td>${item.mac}</td>
+                        <td>${item.project ? item.project : ""}</td>
+                        <td>${item.into_stock}</td>
+                        <td>${item.out_stock}</td>
+                        <td>${item.status_stock}</td>
+                        <td><button class="deleteBtnIN" data-id-IN="${item.id}">Delete</button></td>
+                        <td><button class="updateBtn">Edit</button></td>
+                    `;
+          tableBody.appendChild(row);
+        });
+
+        // Add event listener for the "Delete" button in searchByBrandall function
+        tableBody.addEventListener("click", function (event) {
+          if (event.target.classList.contains("deleteBtnIN")) {
+            const id = event.target.getAttribute("data-id-IN"); // Get the id from data-id attribute
+            deleteData(id);
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        alert("Failed to fetch data. Please try again.");
+      });
+  } else {
+    alert("Please enter a brand name");
+  }
+}
+
+//หา proid ทั้งหมดตามข้อมูลที่ป้อน
+function searchByProid() {
+  const proidInput = document.getElementById("proidInput").value.trim();
+  if (proidInput !== "") {
+    fetch(`${url_api}:5000/searchproid/${proidInput}`)
+      .then((response) => response.json())
+      .then((data) => {
+        // Clear the table
+        const tableBody = document.getElementById("tableBody");
+        tableBody.innerHTML = "";
+
+        // Set table header
+        const tableHead = document.querySelector("thead tr");
+        tableHead.innerHTML = `
+                    <th>Toggle</th>
+                    <th>ID</th>
+                    <th>product id</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Price</th>
+                    <th>Serial</th>
+                    <th>mac</th>
+                    <th>Project</th>
+                    <th>In Stock</th>
+                    <th>Sale Out</th>
+                    <th>Status Stock</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                `;
+
+        // Loop through each item in the data array and create a table row for it
+        data.forEach((item) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                        <td><button class="toggleBtn" data-row-id="${item.id}"></button></td>
+                        <td>${item.id}</td>
+                        <td>${item.proid}</td>
+                        <td>${item.brand}</td>
+                        <td>${item.model}</td>
+                        <td>${item.price}</td>
+                        <td>${item.serial}</td>
+                        <td>${item.mac}</td>
+                        <td>${item.project ? item.project : ""}</td>
+                        <td>${item.into_stock}</td>
+                        <td>${item.out_stock}</td>
+                        <td>${item.status_stock}</td>
+                        <td><button class="deleteBtnIN" data-id-IN="${item.id}">Delete</button></td>
                         <td><button class="updateBtn">Edit</button></td>
                     `;
           tableBody.appendChild(row);
@@ -281,6 +417,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchBrandDiv = document.getElementById("searchBrand"); // Add this line
   const searchBrandallDiv = document.getElementById("searchBrandall"); // Add this line
   const searchprojectDiv = document.getElementById("searchProject");
+  const searchserialDiv = document.getElementById("searchSerial");
+  const searchproidDiv = document.getElementById("searchProid");
+
+
 
   fetch(`${url_api}:5000/instock`)
     .then((response) => response.json())
@@ -480,6 +620,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       document.getElementById("searchBrandall").style.display = "none"; // Hide search input field
       document.getElementById("searchProject").style.display = "none"; // Hide search input field
+      document.getElementById("searchSerial").style.display = "none"; // Hide search input field
 
       searchBrandDiv.style.display = "block"; // Show search input field
       return; // Stop execution as we don't need to fetch data for search page
@@ -488,14 +629,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
       document.getElementById("searchBrand").style.display = "none"; // Hide search input field
       document.getElementById("searchProject").style.display = "none"; // Hide search input field
+      document.getElementById("searchSerial").style.display = "none"; // Hide search input field
 
       searchBrandallDiv.style.display = "block"; // Show search input field
       return; // Stop execution as we don't need to fetch data for search page
     } else if (page === "searchProject") {
       selectedRowIds.length = 0;
-
       document.getElementById("searchBrand").style.display = "none"; // Hide search input field
       document.getElementById("searchBrandall").style.display = "none"; // Hide search input field
+      document.getElementById("searchSerial").style.display = "none"; // Hide search input field
 
       searchprojectDiv.style.display = "block"; // Show search input field
       return; // Stop execution as we don't need to fetch data for search page
@@ -504,6 +646,21 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("searchBrand").style.display = "none"; // Hide search input field
       document.getElementById("searchBrandall").style.display = "none"; // Hide search input field
       document.getElementById("searchProject").style.display = "none"; // Hide search input field
+      document.getElementById("searchSerial").style.display = "none"; // Hide search input field
+      return; // Stop execution as we don't need to fetch data for search page
+    } else if (page === "searchSerial") {
+      selectedRowIds.length = 0;
+      searchserialDiv.style.display = "block"; // Show search input field
+      document.getElementById("searchBrand").style.display = "none"; // Hide search input field
+      document.getElementById("searchBrandall").style.display = "none"; // Hide search input field
+
+      return; // Stop execution as we don't need to fetch data for search page
+    } else if (page === "searchProid") {
+      selectedRowIds.length = 0;
+      searchproidDiv.style.display = "block"; // Show search input field
+      document.getElementById("searchBrand").style.display = "none"; // Hide search input field
+      document.getElementById("searchBrandall").style.display = "none"; // Hide search input field
+
       return; // Stop execution as we don't need to fetch data for search page
     }
 
