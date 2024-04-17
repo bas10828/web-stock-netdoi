@@ -16,9 +16,11 @@ function w3_close() {
 }
 
 function closesearch() {
-  document.getElementById('searchBrand').style.display = 'none'; // Hide search input field
-  document.getElementById('searchBrandall').style.display = 'none'; // Hide search input field
-  document.getElementById('searchProject').style.display = 'none'; // Hide search input field
+  document.getElementById("searchBrand").style.display = "none"; // Hide search input field
+  document.getElementById("searchBrandall").style.display = "none"; // Hide search input field
+  document.getElementById("searchProject").style.display = "none"; // Hide search input field
+  document.getElementById("searchSerial").style.display = "none"; // Hide search input field
+  document.getElementById("searchProid").style.display = "none"; // Hide search input field
 }
 
 // Function to delete data
