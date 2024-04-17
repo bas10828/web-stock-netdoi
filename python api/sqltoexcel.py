@@ -29,10 +29,10 @@ if connection.is_connected():
     cursor = connection.cursor()
 
     # ตัวอย่าง: ดึงข้อมูลจากตาราง
-    cursor.execute("SELECT * FROM `equipment` WHERE project='ปูซาง'")
+    cursor.execute("SELECT * FROM `equipment` WHERE project='วิทยาลัยอาชีวศึกษาเชียงราย (อาคารใหม่)'")
     records = cursor.fetchall()
-    # for row in records:
-    #     print(row)
+    for row in records:
+        print(row)
 
     # สร้าง DataFrame จากข้อมูลที่ได้รับ
     df = pd.DataFrame(records, columns=cursor.column_names)
@@ -43,7 +43,7 @@ if connection.is_connected():
     print("ปิดการเชื่อมต่อกับ MySQL Server")
 
      # สร้างไฟล์ Excel
-    df.to_excel('test.xlsx', index=False)
+    df.to_excel('วิทยาลัยอาชีวศึกษาเชียงราย (อาคารใหม่).xlsx', index=False)
     print("สร้างไฟล์ Excel สำเร็จ")
 
 else:

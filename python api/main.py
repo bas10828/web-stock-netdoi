@@ -7,7 +7,7 @@ import mysql.connector
 #     data = json.load(json_file)
 
 # url_api = data['ip']
-url_api = "http://192.168.114.136"
+url_api = "http://192.168.114.153"
  
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})

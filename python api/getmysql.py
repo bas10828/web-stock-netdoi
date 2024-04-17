@@ -28,7 +28,8 @@ if connection.is_connected():
     cursor = connection.cursor()
 
     # ตัวอย่าง: ดึงข้อมูลจากตาราง
-    cursor.execute("SELECT * FROM equipment")
+    cursor.execute("SELECT * FROM ribraly")
+
     records = cursor.fetchall()
     for row in records:
         print(row)

@@ -1,6 +1,6 @@
 
 // console.log("API URL:", window.apiUrl);
-const url_api = 'http://192.168.114.136'
+const url_api = 'http://192.168.114.153'
 // const url_api = window.apiUrl
 
 
@@ -621,6 +621,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("searchBrandall").style.display = "none"; // Hide search input field
       document.getElementById("searchProject").style.display = "none"; // Hide search input field
       document.getElementById("searchSerial").style.display = "none"; // Hide search input field
+      document.getElementById("searchProid").style.display = "none"; // Hide search input field
 
       searchBrandDiv.style.display = "block"; // Show search input field
       return; // Stop execution as we don't need to fetch data for search page
@@ -630,6 +631,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("searchBrand").style.display = "none"; // Hide search input field
       document.getElementById("searchProject").style.display = "none"; // Hide search input field
       document.getElementById("searchSerial").style.display = "none"; // Hide search input field
+      document.getElementById("searchProid").style.display = "none"; // Hide search input field
 
       searchBrandallDiv.style.display = "block"; // Show search input field
       return; // Stop execution as we don't need to fetch data for search page
@@ -638,6 +640,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("searchBrand").style.display = "none"; // Hide search input field
       document.getElementById("searchBrandall").style.display = "none"; // Hide search input field
       document.getElementById("searchSerial").style.display = "none"; // Hide search input field
+      document.getElementById("searchProid").style.display = "none"; // Hide search input field
 
       searchprojectDiv.style.display = "block"; // Show search input field
       return; // Stop execution as we don't need to fetch data for search page
@@ -647,12 +650,17 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("searchBrandall").style.display = "none"; // Hide search input field
       document.getElementById("searchProject").style.display = "none"; // Hide search input field
       document.getElementById("searchSerial").style.display = "none"; // Hide search input field
+      document.getElementById("searchProid").style.display = "none"; // Hide search input field
+
       return; // Stop execution as we don't need to fetch data for search page
     } else if (page === "searchSerial") {
       selectedRowIds.length = 0;
       searchserialDiv.style.display = "block"; // Show search input field
       document.getElementById("searchBrand").style.display = "none"; // Hide search input field
       document.getElementById("searchBrandall").style.display = "none"; // Hide search input field
+      document.getElementById("searchProid").style.display = "none"; // Hide search input field
+      document.getElementById("searchProject").style.display = "none"; // Hide search input field
+
 
       return; // Stop execution as we don't need to fetch data for search page
     } else if (page === "searchProid") {
@@ -660,6 +668,8 @@ document.addEventListener("DOMContentLoaded", function () {
       searchproidDiv.style.display = "block"; // Show search input field
       document.getElementById("searchBrand").style.display = "none"; // Hide search input field
       document.getElementById("searchBrandall").style.display = "none"; // Hide search input field
+      document.getElementById("searchProject").style.display = "none"; // Hide search input field
+      document.getElementById("searchSerial").style.display = "none"; // Hide search input field
 
       return; // Stop execution as we don't need to fetch data for search page
     }
