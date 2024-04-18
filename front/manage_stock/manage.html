@@ -171,8 +171,12 @@
         }
         // Get selectedRowIds from sessionStorage
         const selectedRowIds = JSON.parse(sessionStorage.getItem('selectedRowIds'));
+        const selectedProject = JSON.parse(sessionStorage.getItem('selectedProject'));
         // Use selectedRowIds as needed
-        console.log("Selected Row IDs:", selectedRowIds);
+        console.log("Selected Row IDs:", selectedRowIds, selectedProject);
+
+        const projectInput = document.getElementById('project'); // เลือก input element ที่มี id เป็น "project"
+        projectInput.value = selectedProject; // กำหนดค่าของ input element ให้เป็นค่าของ project
 
         function searchproductid() {
             const proidInput = document.getElementById('proidInput').value.trim();

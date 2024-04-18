@@ -60,11 +60,13 @@ function deleteData(id) {
 // หาอุปกรณ์ทั้งหมดของ project
 function searchByProject() {
   const projectInput = document.getElementById("projectInput").value.trim();
-  console.log(projectInput);
+  // console.log(projectInput);
   if (projectInput !== "") {
     fetch(`${url_api}:5000/searchproject/${projectInput}`)
       .then((response) => response.json())
       .then((data) => {
+        // console.log("data",data[0].project);
+
         // Clear the table
         const tableBody = document.getElementById("tableBody");
         tableBody.innerHTML = "";
@@ -175,15 +177,17 @@ function searchByBrand() {
 
 // Array to store IDs of selected rows
 const selectedRowIds = [];
+let selectedProject = ""
 
 // Function to handle toggling of checkbox
 function toggleCheckbox(event) {
   const button = event.target; // Get the clicked button
   const row = button.closest("tr"); // Find the closest table row to the clicked button
-  console.log("console", row);
+  // console.log("console", row);
 
   if (row) {
     const id = row.querySelector("td:nth-child(2)").textContent; // Get the ID from the second column of the row
+    const project = row.querySelector("td:nth-child(9)").textContent; // Get the project from the ninth column of the row
 
     if (row.classList.contains("selected")) {
       row.classList.remove("selected");
@@ -194,7 +198,13 @@ function toggleCheckbox(event) {
       if (index !== -1) {
         selectedRowIds.splice(index, 1);
       }
+
+      // Clear selectedProject
+      selectedProject = "";
     } else {
+      // Set selectedProject to the project of the clicked row
+      selectedProject = project;
+
       row.classList.add("selected");
       button.textContent = "✓"; // Change button content to checkmark when checked
 
@@ -206,7 +216,9 @@ function toggleCheckbox(event) {
   }
 
   console.log("Selected Row IDs:", selectedRowIds);
+  console.log("Selected Project:", selectedProject);
 }
+
 
 function SelectAll() {
   const checkboxes = document.querySelectorAll("tbody tr");
@@ -214,6 +226,7 @@ function SelectAll() {
   if (selectedRowIds.length === checkboxes.length) {
     // Clear selectedRowIds array
     selectedRowIds.length = 0;
+    selectedProject = ""; // Clear selectedProject
 
     checkboxes.forEach(row => {
       row.classList.remove("selected");
@@ -223,6 +236,7 @@ function SelectAll() {
   } else {
     // Clear selectedRowIds array
     selectedRowIds.length = 0;
+    selectedProject = ""; // Clear selectedProject
 
     checkboxes.forEach(row => {
       row.classList.add("selected");
@@ -231,9 +245,13 @@ function SelectAll() {
       const button = row.querySelector("button");
       button.textContent = "✓";
     });
+    // Set selectedProject to the project of the first row
+    const firstRowProject = checkboxes[0].querySelector("td:nth-child(9)").textContent;
+    selectedProject = firstRowProject;
   }
 
   console.log("Selected Row IDs:", selectedRowIds);
+  console.log("Selected Project:", selectedProject);
 }
 
 //หา brand ทั้งหมดตามข้อมูลที่ป้อน
@@ -635,7 +653,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const managestockBtn = document.getElementById("managestockBtn");
   managestockBtn.addEventListener("click", function () {
     // Redirect to create.html when "Add Data" button is clicked
+    // console.log(data)
     sessionStorage.setItem("selectedRowIds", JSON.stringify(selectedRowIds));
+    sessionStorage.setItem("selectedProject", JSON.stringify(selectedProject));
+
     window.location.href = "manage_stock/manage.html";
   });
 
