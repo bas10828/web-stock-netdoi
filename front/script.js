@@ -258,7 +258,7 @@ function SelectAll() {
 function searchByBrandall() {
   const brandInput = document.getElementById("brandallInput").value.trim();
   if (brandInput !== "") {
-    fetch(`${url_api}:5000/countmodelall/${brandInput}`)
+    fetch(`${url_api}:5000/searchbrand/${brandInput}`)
       .then((response) => response.json())
       .then((data) => {
         // Clear the table

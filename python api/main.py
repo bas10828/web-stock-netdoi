@@ -81,7 +81,7 @@ def get_countmodel_data():
     return jsonify(countmodel_records)
 
 # Read (อ่านข้อมูลจาก brand)
-@app.route('/countmodelall/<brand>', methods=['GET'])
+@app.route('/searchbrand/<brand>', methods=['GET'])
 def get_countmodelall_data_by_brand(brand):
     cursor = connection.cursor(dictionary=True)
     cursor.execute("""
@@ -90,9 +90,9 @@ def get_countmodelall_data_by_brand(brand):
         FROM 
             equipment 
         WHERE
-            brand = %s
+            brand LIKE %s
         
-    """, (brand,))
+    """, ('%' + brand + '%',))
     countmodel_records = cursor.fetchall()
     cursor.close()
     return jsonify(countmodel_records)
@@ -107,9 +107,9 @@ def get_data_by_model(model):
         FROM 
             equipment 
         WHERE
-            model = %s
+            model LIKE %s
         
-    """, (model,))
+    """, ('%' + model + '%',))
     countmodel_records = cursor.fetchall()
     cursor.close()
     return jsonify(countmodel_records)
@@ -131,6 +131,7 @@ def get_create_by_proid(proid):
     cursor.close()
     return jsonify(createbyproid_records)
 
+
 # Read (อ่านข้อมูลจาก project)
 @app.route('/searchproject/<project>', methods=['GET'])
 def get_search_data_by_project(project):
@@ -141,9 +142,9 @@ def get_search_data_by_project(project):
         FROM 
             equipment 
         WHERE
-            project = %s
+            project LIKE  %s
         
-    """, (project,))
+    """, ('%' + project + '%',))
     search_records = cursor.fetchall()
     cursor.close()
     return jsonify(search_records)
@@ -158,9 +159,9 @@ def get_search_data_by_serial(serial):
         FROM 
             equipment 
         WHERE
-            serial = %s
+            serial LIKE %s
         
-    """, (serial,))
+    """, ('%' + serial + '%',))
     search_records = cursor.fetchall()
     cursor.close()
     return jsonify(search_records)
@@ -212,10 +213,10 @@ def get_countmodel_data_by_brand(brand):
         FROM 
             equipment 
         WHERE
-            brand = %s
+            brand LIKE  %s
         GROUP BY 
             model
-    """, (brand,))
+    """, ('%' + brand + '%',))
     countmodel_records = cursor.fetchall()
     cursor.close()
     return jsonify(countmodel_records)
