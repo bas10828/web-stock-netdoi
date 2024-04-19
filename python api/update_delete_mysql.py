@@ -16,7 +16,7 @@ if connection.is_connected():
 cursor = connection.cursor()
 
 # คำสั่ง SQL สำหรับลบข้อมูล
-sql_delete = "UPDATE `equipment` SET into_stock = '2024-03-23', out_stock = '2024-03-23' WHERE project = 'ภูซาง';"
+sql_delete = "UPDATE `equipment` SET price = 1551.5 WHERE id IN (279, 280);"
 
 # ดำเนินการลบข้อมูลในฐานข้อมูล
 cursor.execute(sql_delete)

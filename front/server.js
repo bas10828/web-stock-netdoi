@@ -34,20 +34,15 @@ app.get('/manage_stock/manage.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'manage_stock', 'manage.html'));
 });
 
+// Serve exportexcel.html
+app.get('/export_excel/exportexcel.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'export_excel', 'exportexcel.html'));
+});
+
 // Serve update.html
 app.get('/update/update.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'update', 'update.html'));
 });
-
-// // Serve globalVariables.json
-// app.get('/globalVariables.json', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'globalVariables.json'));
-// });
-
-// // Serve .env
-// app.get('/.env', (req, res) => {
-//     res.sendFile(path.join(__dirname, '.env'));
-// });
 
 
 

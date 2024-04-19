@@ -649,15 +649,18 @@ document.addEventListener("DOMContentLoaded", function () {
     window.location.href = "create/create_dynamic.html";
   });
 
-  // Add event listener for the "Add Data Dynamic" button
   const managestockBtn = document.getElementById("managestockBtn");
   managestockBtn.addEventListener("click", function () {
-    // Redirect to create.html when "Add Data" button is clicked
-    // console.log(data)
     sessionStorage.setItem("selectedRowIds", JSON.stringify(selectedRowIds));
     sessionStorage.setItem("selectedProject", JSON.stringify(selectedProject));
 
     window.location.href = "manage_stock/manage.html";
+  });
+
+  const exportexcelBtn = document.getElementById("exportexcelBtn");
+  exportexcelBtn.addEventListener("click", function () {
+    console.log("export")
+    window.location.href = "export_excel/exportexcel.html";
   });
 
   // Add event listener for the page selector

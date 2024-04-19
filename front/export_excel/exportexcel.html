@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export To Excel</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            color: blue;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        /* Fixed Header Style */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        /* Adjust content padding to avoid overlap */
+        body {
+            padding-top: 70px;
+            /* Adjust according to header height */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top menu on small screens -->
+    <header class="w3-container w3-top w3-white w3-xlarge w3-padding-16 fixed-header">
+        <!-- Container for input and buttons -->
+        <div class="container">
+            <input type="text" id="input" placeholder="ป้อนชื่อโปรเจคที่นี่">
+            <button onclick="showData()">Show</button>
+            <input type="text" id="filename" value="Excel">
+            <button onclick="saveToExcel()">Save</button>
+            <a id="downloadLink" style="display: none;">Download Excel File</a>
+        </div>
+    </header>
+
+
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Serial</th>
+                <th>MAC</th>
+                <th>Project</th>
+                <th>Price</th>
+                <th>Into Stock</th>
+                <th>Out Stock</th>
+                <th>Status Stock</th>
+            </tr>
+        </thead>
+        <tbody id="dataBody">
+            <!-- Data will be filled here -->
+        </tbody>
+    </table>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <script>
+        const url_api = 'http://192.168.114.153'
+
+        async function showData() {
+            const input = document.getElementById("input").value;
+            const url = `${url_api}:5000/searchproject/${input}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const dataTable = document.getElementById("dataBody");
+
+                // Clear previous data
+                dataTable.innerHTML = "";
+
+                // Populate table with new data
+                data.forEach(item => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${item.id}</td>
+                        <td>${item.brand}</td>
+                        <td>${item.model}</td>
+                        <td>${item.serial}</td>
+                        <td>${item.mac}</td>
+                        <td>${item.project}</td>
+                        <td>${item.price}</td>
+                        <td>${item.into_stock}</td>
+                        <td>${item.out_stock}</td>
+                        <td>${item.status_stock}</td>
+                    `;
+                    dataTable.appendChild(row);
+                });
+            } catch (error) {
+                console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+            }
+        }
+
+
+
+        async function saveToExcel() {
+            const input = document.getElementById("input").value;
+            const filename = document.getElementById("filename").value;
+
+            const url = `${url_api}:5000/searchproject/${input}`;
+
+            try {
+                const response = await fetch(url);
+                const jsonData = await response.json();
+
+                // Convert JSON data to an array of arrays
+                const data = [Object.keys(jsonData[0])]; // Headers
+                jsonData.forEach(item => {
+                    data.push(Object.values(item)); // Values
+                });
+
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+                XLSX.writeFile(wb, `${filename}.xlsx`);
+            } catch (error) {
+                console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+            }
+        }
+
+    </script>
+</body>
+
+</html>
