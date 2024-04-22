@@ -114,17 +114,19 @@ def get_data_by_model(model):
     cursor.close()
     return jsonify(countmodel_records)
 
-# Read (อ่านข้อมูลจาก table libraly จาก proid)
+
+# Read (อ่านข้อมูลจาก proid แสดง proid, brand, model นำไปใช้กรอกข้อมูลตอน add data)
 @app.route('/createbyproid/<proid>', methods=['GET'])
 def get_create_by_proid(proid):
     cursor = connection.cursor(dictionary=True)
     cursor.execute("""
         SELECT 
-            *
+            proid, brand, model
         FROM 
-            ribraly 
+            equipment 
         WHERE
             proid = %s
+        LIMIT 1
         
     """, (proid,))
     createbyproid_records = cursor.fetchall()
@@ -193,7 +195,7 @@ def get_search_data_by_proid_limit(proid,limit):
         FROM 
             equipment 
         WHERE
-            proid = %s
+            proid = %s AND status_stock = 'in stock'
         LIMIT %s
     """, (proid,limit))
     search_records = cursor.fetchall()

@@ -14,7 +14,7 @@ connection = mysql.connector.connect(
 @app.route('/data', methods=['GET'])
 def get_data():
     cursor = connection.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM equipment")
+    cursor.execute("SELECT * FROM ribraly")
     records = cursor.fetchall()
     cursor.close()
     return jsonify(records)
