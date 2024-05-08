@@ -29,7 +29,7 @@ if connection.is_connected():
     cursor = connection.cursor()
 
     # ตัวอย่าง: ดึงข้อมูลจากตาราง
-    cursor.execute("SELECT * FROM `equipment` WHERE project='วิทยาลัยอาชีวศึกษาเชียงราย (อาคารใหม่)'")
+    cursor.execute("SELECT * FROM `equipment` WHERE project='โรงเรียนปงรัชดาภิเษก'")
     records = cursor.fetchall()
     for row in records:
         print(row)
@@ -43,7 +43,7 @@ if connection.is_connected():
     print("ปิดการเชื่อมต่อกับ MySQL Server")
 
      # สร้างไฟล์ Excel
-    df.to_excel('วิทยาลัยอาชีวศึกษาเชียงราย (อาคารใหม่).xlsx', index=False)
+    df.to_excel('โรงเรียนปงรัชดาภิเษก.xlsx', index=False)
     print("สร้างไฟล์ Excel สำเร็จ")
 
 else:

@@ -16,10 +16,10 @@ if connection.is_connected():
 cursor = connection.cursor()
 
 # คำสั่ง SQL สำหรับลบข้อมูล
-sql_delete = "UPDATE `equipment` SET price = 1551.5 WHERE id IN (279, 280);"
+sql = "UPDATE `equipment` SET model = 'UFP920S01-1.5' WHERE model = 'AUFP920S01-1.5';"
 
 # ดำเนินการลบข้อมูลในฐานข้อมูล
-cursor.execute(sql_delete)
+cursor.execute(sql)
 
 # ยืนยันการเปลี่ยนแปลง
 connection.commit()
