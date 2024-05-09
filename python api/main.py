@@ -35,8 +35,8 @@ def create_data():
     # วน loop เพื่อเพิ่มข้อมูลทีละรายการ
     for item in data:
         cursor = connection.cursor()
-        query = "INSERT INTO equipment (proid, serial, mac, status_stock, into_stock, out_stock, price, brand, model, project) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(query, (item['proid'], item['serial'], item['mac'], item['status_stock'], item['into_stock'], item['out_stock'], item['price'], item['brand'], item['model'], item['project']))
+        query = "INSERT INTO equipment (proid, serial, mac, status_stock, into_stock, out_stock, price, brand, model, project, purchase) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (item['proid'], item['serial'], item['mac'], item['status_stock'], item['into_stock'], item['out_stock'], item['price'], item['brand'], item['model'], item['project'], item['purchase']))
         connection.commit()
         cursor.close()
     
@@ -239,8 +239,8 @@ def get_data():
 def update_data(id):
     data = request.json  # รับข้อมูลที่ส่งมาจากแอปพลิเคชัน
     cursor = connection.cursor()
-    query = "UPDATE equipment SET proid=%s, serial=%s, mac=%s, status_stock=%s, into_stock=%s,out_stock=%s, price=%s, brand=%s, model=%s, project=%s WHERE id=%s"
-    cursor.execute(query, (data['proid'], data['serial'], data['mac'], data['status_stock'], data['into_stock'],data['out_stock'], data['price'], data['brand'], data['model'], data['project'], id))
+    query = "UPDATE equipment SET proid=%s, serial=%s, mac=%s, status_stock=%s, into_stock=%s, out_stock=%s, price=%s, brand=%s, model=%s, project=%s, purchase=%s WHERE id=%s"
+    cursor.execute(query, (data['proid'], data['serial'], data['mac'], data['status_stock'], data['into_stock'], data['out_stock'], data['price'], data['brand'], data['model'], data['project'], data['purchase'], id))
     connection.commit()
     cursor.close()
     return 'Data updated successfully', 200, {'Access-Control-Allow-Origin':url_api + ':3000'}

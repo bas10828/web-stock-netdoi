@@ -82,6 +82,7 @@ function searchByProject() {
                     <th>Price</th>
                     <th>Serial</th>
                     <th>mac</th>
+                    <th>purchase</th>
                     <th>Project</th>
                     <th>In Stock</th>
                     <th>Sale Out</th>
@@ -102,6 +103,7 @@ function searchByProject() {
                         <td>${item.price}</td>
                         <td>${item.serial}</td>
                         <td>${item.mac}</td>
+                        <td>${item.purchase}</td>
                         <td>${item.project ? item.project : ""}</td>
                         <td>${item.into_stock}</td>
                         <td>${item.out_stock}</td>
@@ -187,7 +189,7 @@ function toggleCheckbox(event) {
 
   if (row) {
     const id = row.querySelector("td:nth-child(2)").textContent; // Get the ID from the second column of the row
-    const project = row.querySelector("td:nth-child(9)").textContent; // Get the project from the ninth column of the row
+    const project = row.querySelector("td:nth-child(10)").textContent; // Get the project from the ninth column of the row
 
     if (row.classList.contains("selected")) {
       row.classList.remove("selected");
@@ -246,7 +248,7 @@ function SelectAll() {
       button.textContent = "✓";
     });
     // Set selectedProject to the project of the first row
-    const firstRowProject = checkboxes[0].querySelector("td:nth-child(9)").textContent;
+    const firstRowProject = checkboxes[0].querySelector("td:nth-child(10)").textContent;
     selectedProject = firstRowProject;
   }
 
@@ -276,6 +278,7 @@ function searchByBrandall() {
                     <th>Price</th>
                     <th>Serial</th>
                     <th>mac</th>
+                    <th>purchase</th>
                     <th>Project</th>
                     <th>In Stock</th>
                     <th>Sale Out</th>
@@ -296,6 +299,7 @@ function searchByBrandall() {
                         <td>${item.price}</td>
                         <td>${item.serial}</td>
                         <td>${item.mac}</td>
+                        <td>${item.purchase}</td>
                         <td>${item.project ? item.project : ""}</td>
                         <td>${item.into_stock}</td>
                         <td>${item.out_stock}</td>
@@ -347,6 +351,7 @@ function searchmodel() {
                     <th>Price</th>
                     <th>Serial</th>
                     <th>mac</th>
+                    <th>purchase</th>
                     <th>Project</th>
                     <th>In Stock</th>
                     <th>Sale Out</th>
@@ -367,6 +372,7 @@ function searchmodel() {
                         <td>${item.price}</td>
                         <td>${item.serial}</td>
                         <td>${item.mac}</td>
+                        <td>${item.purchase}</td>
                         <td>${item.project ? item.project : ""}</td>
                         <td>${item.into_stock}</td>
                         <td>${item.out_stock}</td>
@@ -416,6 +422,7 @@ function searchBySerial() {
                     <th>Price</th>
                     <th>Serial</th>
                     <th>mac</th>
+                    <th>purchase</th>
                     <th>Project</th>
                     <th>In Stock</th>
                     <th>Sale Out</th>
@@ -436,6 +443,7 @@ function searchBySerial() {
                         <td>${item.price}</td>
                         <td>${item.serial}</td>
                         <td>${item.mac}</td>
+                        <td>${item.purchase}</td>
                         <td>${item.project ? item.project : ""}</td>
                         <td>${item.into_stock}</td>
                         <td>${item.out_stock}</td>
@@ -485,6 +493,7 @@ function searchByProid() {
                     <th>Price</th>
                     <th>Serial</th>
                     <th>mac</th>
+                    <th>purchase</th>
                     <th>Project</th>
                     <th>In Stock</th>
                     <th>Sale Out</th>
@@ -505,6 +514,7 @@ function searchByProid() {
                         <td>${item.price}</td>
                         <td>${item.serial}</td>
                         <td>${item.mac}</td>
+                        <td>${item.purchase}</td>
                         <td>${item.project ? item.project : ""}</td>
                         <td>${item.into_stock}</td>
                         <td>${item.out_stock}</td>
@@ -583,6 +593,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <td>${item.price}</td>
             <td>${item.serial}</td>
             <td>${item.mac}</td>
+            <td>${item.purchase}</td>
             <td>${item.project ? item.project : ""}</td>
             <td>${item.into_stock}</td>
             <td>${item.out_stock}</td>
@@ -619,10 +630,11 @@ document.addEventListener("DOMContentLoaded", function () {
         price: row.querySelector("td:nth-child(6)").textContent,
         serial: row.querySelector("td:nth-child(7)").textContent,
         mac: row.querySelector("td:nth-child(8)").textContent,
-        project: row.querySelector("td:nth-child(9)").textContent,
-        into_stock: row.querySelector("td:nth-child(10)").textContent,
-        out_stock: row.querySelector("td:nth-child(11)").textContent,
-        status_stock: row.querySelector("td:nth-child(12)").textContent,
+        purchase: row.querySelector("td:nth-child(9)").textContent,
+        project: row.querySelector("td:nth-child(10)").textContent,
+        into_stock: row.querySelector("td:nth-child(11)").textContent,
+        out_stock: row.querySelector("td:nth-child(12)").textContent,
+        status_stock: row.querySelector("td:nth-child(13)").textContent,
       };
 
       // Store rowData in sessionStorage to pass to update.html
@@ -688,6 +700,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <th>Price</th>
                 <th>Serial</th>
                 <th>mac</th>
+                <th>purchase</th>
                 <th>Project</th>
                 <th>In Stock</th>
                 <th>Sale Date</th>
@@ -707,6 +720,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <th>Price</th>
                 <th>Serial</th>
                 <th>mac</th>
+                <th>purchase</th>
                 <th>Project</th>
                 <th>In Stock</th>
                 <th>Sale Date</th>
@@ -726,6 +740,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <th>Price</th>
                 <th>Serial</th>
                 <th>mac</th>
+                <th>purchase</th>
                 <th>Project</th>
                 <th>in Stock</th>
                 <th>Sale Date</th>

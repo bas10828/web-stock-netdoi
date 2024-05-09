@@ -92,6 +92,9 @@
             <label for="mac">MAC:</label>
             <input type="text" id="mac" name="mac"><br><br>
 
+            <label for="purchase">purchase:</label>
+            <input type="text" id="purchase" name="purchase"><br><br>
+
             <label for="status_stock">Status Stock:</label>
             <input type="text" id="status_stock" name="status_stock"><br><br>
 
@@ -133,6 +136,7 @@
             document.getElementById('proid').value = rowData.proid;
             document.getElementById('serial').value = rowData.serial;
             document.getElementById('mac').value = rowData.mac;
+            document.getElementById('purchase').value = rowData.purchase;
             document.getElementById('status_stock').value = rowData.status_stock;
 
             document.getElementById('into_stock').value = rowData.into_stock;
@@ -156,6 +160,7 @@
                 proid: formData.get('proid'),
                 serial: formData.get('serial'),
                 mac: formData.get('mac'),
+                purchase: formData.get('purchase'),
                 status_stock: formData.get('status_stock'),
                 into_stock: formData.get('into_stock'),
                 out_stock: formData.get('into_stock'),

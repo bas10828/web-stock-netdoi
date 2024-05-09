@@ -152,6 +152,9 @@
                 <label for="model">Model:</label>
                 <input type="text" id="model" name="model">
 
+                <label for="purchase">purchase:</label>
+                <input type="text" id="purchase" name="purchase">
+
                 <label for="price">Price:</label>
                 <input type="text" id="price" name="price">
 
@@ -249,6 +252,7 @@
                 mac: document.getElementById('mac').value,
                 brand: document.getElementById('brand').value,
                 model: document.getElementById('model').value,
+                purchase: document.getElementById('purchase').value,
                 price: document.getElementById('price').value,
                 into_stock: document.getElementById('into_stock').value,
                 out_stock: document.getElementById('out_stock').value,
@@ -303,6 +307,16 @@
             var modelInput = createInput('model_' + fieldCounter, 'text', 'Model');
             modelInput.value = mainFormData.model
             fieldContainer.appendChild(modelInput);
+
+            // Create line break element
+            fieldContainer.appendChild(document.createElement('br'));
+
+            var purchaseLabel = document.createElement('label');
+            purchaseLabel.textContent = 'purchase:';
+            fieldContainer.appendChild(purchaseLabel);
+            var purchaseInput = createInput('purchase' + fieldCounter, 'text', 'purchase');
+            purchaseInput.value = mainFormData.purchase
+            fieldContainer.appendChild(purchaseInput);
 
             // Create line break element
             fieldContainer.appendChild(document.createElement('br'));
@@ -429,6 +443,7 @@
                 mac: document.getElementById('mac').value,
                 brand: document.getElementById('brand').value,
                 model: document.getElementById('model').value,
+                purchase: document.getElementById('purchase').value,
                 price: document.getElementById('price').value,
                 into_stock: document.getElementById('into_stock').value,
                 out_stock: document.getElementById('out_stock').value,
@@ -450,6 +465,7 @@
                     mac: fieldContainer.querySelector('input[name^="mac"]').value,
                     brand: fieldContainer.querySelector('input[name^="brand"]').value,
                     model: fieldContainer.querySelector('input[name^="model"]').value,
+                    purchase: fieldContainer.querySelector('input[name^="purchase"]').value,
                     price: fieldContainer.querySelector('input[name^="price"]').value,
                     serial: fieldContainer.querySelector('input[name^="serial"]').value,
                     project: fieldContainer.querySelector('input[name^="project"]').value,
